@@ -43,7 +43,7 @@ public class BetterFoliage
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        if (!ModList.get().isLoaded("optifine"))
+        if (BFConfig.CLIENT.forceForgeLighting.get() && !ModList.get().isLoaded("optifine"))
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }

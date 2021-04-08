@@ -19,6 +19,8 @@ public class ClientConfig
 
     public final IntValue leavesCacheSize;
 
+    public final BooleanValue forceForgeLighting;
+
     ClientConfig(Builder innerBuilder)
     {
         Function<String, Builder> builder = name -> innerBuilder.translation(MOD_ID + ".config.server." + name);
@@ -31,6 +33,7 @@ public class ClientConfig
         leaves = builder.apply("leaves").comment("Enable Leaves?").define("leaves", true);
         snowballs = builder.apply("snowballs").comment("Enable Snowballs?").define("snowballs", true);
         leavesCacheSize = builder.apply("leavesCacheSize").comment("Determines the size of the leaves cache. Number of models cached per leaf block will be the number you input to the third power. Bigger cache = more RAM, but less z-fighting").worldRestart().defineInRange("leavesCacheSize", 7, 5, 20);
+        forceForgeLighting = builder.apply("forceForgeLighting").comment("Force Forge Lighting Pipeline? (should be true when not using Optifine)").define("forceForgeLighting", true);
 
         innerBuilder.pop();
     }
