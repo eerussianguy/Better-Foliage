@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "minecraft:block/dark_oak_leaves",
+  "fluff": "betterfoliage:block/dark_oak_fluff"
+}

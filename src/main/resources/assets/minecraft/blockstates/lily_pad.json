@@ -1,0 +1,115 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minecraft:block/lily_pad",
+		"weight": 16
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 90,
+		"weight": 16
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 180,
+		"weight": 16
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 270,
+		"weight": 16
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad0"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad0",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad0",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad0",
+        "y": 270
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad1"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad1",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad1",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad1",
+        "y": 270
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad2"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad2",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad2",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad2",
+        "y": 270
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad3"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad3",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad3",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad3",
+        "y": 270
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad4"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad4",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad4",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad4",
+        "y": 270
+      },
+	  {
+        "model": "betterfoliage:block/lily_pad5"
+      },
+      {
+        "model": "betterfoliage:block/lily_pad5",
+        "y": 90
+      },
+      {
+        "model": "betterfoliage:block/lily_pad5",
+        "y": 180
+      },
+      {
+        "model": "betterfoliage:block/lily_pad5",
+        "y": 270
+      }
+    ]
+  }
+}

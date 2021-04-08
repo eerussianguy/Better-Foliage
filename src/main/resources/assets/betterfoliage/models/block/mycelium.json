@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:grass",
+  "dirt": "minecraft:block/dirt",
+  "top": "minecraft:block/mycelium_top",
+  "overlay": "minecraft:block/mycelium_side",
+  "tint": false
+}

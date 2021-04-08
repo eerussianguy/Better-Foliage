@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "snowy=false": {
+      "model": "betterfoliage:block/mycelium"
+    },
+    "snowy=true": {
+      "model": "betterfoliage:block/snowy_grass_block"
+    }
+  }
+}

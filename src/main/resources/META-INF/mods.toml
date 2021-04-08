@@ -1,0 +1,23 @@
+modLoader="javafml" #mandatory
+loaderVersion="[36,)"
+license="MIT License"
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+[[mods]] #mandatory
+modId="betterfoliage" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="Better Foliage" #mandatory
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+logoFile="examplemod.png" #optional
+credits="Paint_Ninja for the commission" #optional
+authors="EERussianguy" #optional
+description='''
+A slim port of Better Foliage for 1.16 and beyond.
+
+Most changes are configurable via resource pack.
+'''
+[[dependencies.betterfoliage]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"

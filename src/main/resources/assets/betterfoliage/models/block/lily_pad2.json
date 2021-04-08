@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "betterfoliage:block/lily_pad",
+  "textures": {
+    "flower": "betterfoliage:block/lilypad_flower0",
+    "roots": "betterfoliage:block/lilypad_roots2"
+  }
+}
