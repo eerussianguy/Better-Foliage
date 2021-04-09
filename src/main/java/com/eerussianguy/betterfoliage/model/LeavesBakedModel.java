@@ -66,7 +66,8 @@ public class LeavesBakedModel implements IDynamicBakedModel
     private void buildCrosses()
     {
         int ordinal = 0;
-        float[] intervals = Helpers.intervals(BFConfig.CLIENT.leavesCacheSize.get(), -2.5f, 2.5f);
+        float leavesVariationDistance = BFConfig.CLIENT.leavesVariationDistance.get().floatValue();
+        float[] intervals = Helpers.intervals(BFConfig.CLIENT.leavesCacheSize.get(), -leavesVariationDistance, leavesVariationDistance);
         for (float x : intervals)
         {
             for (float y : intervals)
