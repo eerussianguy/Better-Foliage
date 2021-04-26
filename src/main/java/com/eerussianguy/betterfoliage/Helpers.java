@@ -9,9 +9,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
+import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
+
 public class Helpers
 {
     public static final Direction[] DIRECTIONS = Direction.values();
+
+    public static final ResourceLocation EMPTY = new ResourceLocation(MOD_ID, "empty");
 
     public static BlockPartFace makeTintedFace(BlockFaceUV uv)
     {

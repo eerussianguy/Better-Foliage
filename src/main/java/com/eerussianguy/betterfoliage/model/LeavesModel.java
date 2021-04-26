@@ -19,17 +19,23 @@ public class LeavesModel implements IModelGeometry<LeavesModel>
 {
     private final ResourceLocation leaves;
     private final ResourceLocation fluff;
+    private final ResourceLocation overlay;
+    private final boolean tintLeaves;
+    private final boolean tintOverlay;
 
-    public LeavesModel(ResourceLocation leaves, ResourceLocation fluff)
+    public LeavesModel(ResourceLocation leaves, ResourceLocation fluff, ResourceLocation overlay, boolean tintLeaves, boolean tintOverlay)
     {
         this.leaves = leaves;
         this.fluff = fluff;
+        this.overlay = overlay;
+        this.tintLeaves = tintLeaves;
+        this.tintOverlay = tintOverlay;
     }
 
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation)
     {
-        return new LeavesBakedModel(modelLocation, leaves, fluff);
+        return new LeavesBakedModel(modelLocation, leaves, fluff, overlay, tintLeaves, tintOverlay);
     }
 
     @Override

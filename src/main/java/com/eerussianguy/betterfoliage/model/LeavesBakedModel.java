@@ -30,7 +30,11 @@ public class LeavesBakedModel implements IDynamicBakedModel
 
     private final ResourceLocation leaves;
     private final ResourceLocation fluff;
+    private final ResourceLocation overlay;
     private final ResourceLocation modelLocation;
+    private final boolean isOverlay;
+    private final boolean tintOverlay;
+    private final boolean tintLeaves;
 
     private TextureAtlasSprite leavesTex;
     private TextureAtlasSprite fluffTex;
@@ -39,14 +43,19 @@ public class LeavesBakedModel implements IDynamicBakedModel
     private final IBakedModel[] crosses = new IBakedModel[(int) Math.pow(BFConfig.CLIENT.leavesCacheSize.get(), 3)];
 
     private IBakedModel core;
+    private IBakedModel outerCore;
 
-    public LeavesBakedModel(ResourceLocation modelLocation, ResourceLocation leaves, ResourceLocation fluff)
+    public LeavesBakedModel(ResourceLocation modelLocation, ResourceLocation leaves, ResourceLocation fluff, ResourceLocation overlay, boolean tintLeaves, boolean tintOverlay)
     {
         this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemCameraTransforms.NO_TRANSFORMS, ItemOverrideList.EMPTY.getOverrides());
 
         this.modelLocation = modelLocation;
         this.leaves = leaves;
         this.fluff = fluff;
+        this.overlay = overlay;
+        this.isOverlay = !overlay.equals(Helpers.EMPTY);
+        this.tintLeaves = tintLeaves;
+        this.tintOverlay = tintOverlay;
 
         INSTANCES.add(this);
     }
@@ -55,8 +64,12 @@ public class LeavesBakedModel implements IDynamicBakedModel
     {
         leavesTex = Helpers.getTexture(leaves);
         fluffTex = Helpers.getTexture(fluff);
-
-        buildBlock();
+        if (isOverlay)
+        {
+            TextureAtlasSprite overlayTex = Helpers.getTexture(overlay);
+            outerCore = buildBlock(overlayTex, tintOverlay);
+        }
+        core = buildBlock(leavesTex, tintLeaves);
         buildCrosses();
     }
 
@@ -109,27 +122,28 @@ public class LeavesBakedModel implements IDynamicBakedModel
         return new BlockPartRotation(new Vector3f(8f * 0.0625f, 0f, 8f * 0.0625f), Axis.Y, degrees, false);
     }
 
-    private void buildBlock()
+    private IBakedModel buildBlock(TextureAtlasSprite tex, boolean tint)
     {
         Map<Direction, BlockPartFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         for (Direction d : Helpers.DIRECTIONS)
         {
             BlockFaceUV faceUV = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
-            mapFacesIn.put(d, Helpers.makeTintedFace(faceUV));
+            mapFacesIn.put(d, tint ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
         }
         BlockPart part = new BlockPart(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
-        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrideList.EMPTY, false).particle(leavesTex);
+        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrideList.EMPTY, false).particle(tex);
 
         for (Map.Entry<Direction, BlockPartFace> e : part.faces.entrySet())
         {
             Direction d = e.getKey();
-            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), leavesTex, d, ModelRotation.X0_Y0, modelLocation));
+            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), tex, d, ModelRotation.X0_Y0, modelLocation));
         }
 
-        core = builder.build();
+        return builder.build();
     }
 
     @Override
+    @Nonnull
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData extraData)
     {
         List<BakedQuad> coreQuads = core.getQuads(state, side, rand, extraData);
@@ -140,10 +154,16 @@ public class LeavesBakedModel implements IDynamicBakedModel
         List<BakedQuad> quads = new ArrayList<>(coreQuads);
         List<BakedQuad> crossQuads = crosses[data.get()].getQuads(state, side, rand, extraData);
         quads.addAll(crossQuads);
+        if (isOverlay)
+        {
+            List<BakedQuad> outQuads = outerCore.getQuads(state, side, rand, extraData);
+            quads.addAll(outQuads);
+        }
         return quads;
     }
 
     @Override
+    @Nonnull
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
     {
         return new LeavesOrdinalData(pos);
