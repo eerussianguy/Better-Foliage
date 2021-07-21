@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "biomesoplenty:block/flowering_oak_leaves",
+  "overlay": "biomesoplenty:block/flowering_oak_leaves_overlay",  
+  "fluff": "betterfoliage:block/flowering_oak_fluff",
+  "TintLeaves": "false"
+}

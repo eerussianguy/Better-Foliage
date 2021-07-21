@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "biomesoplenty:block/rainbow_birch_leaves",
+  "fluff": "betterfoliage:block/rainbow_birch_fluff"
+}

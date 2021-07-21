@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "atmospheric:block/flowering_morado_leaves",
+  "overlay": "atmospheric:block/flowering_morado_leaves_overlay",
+  "fluff": "betterfoliage:block/flowering_morado_fluff"
+}

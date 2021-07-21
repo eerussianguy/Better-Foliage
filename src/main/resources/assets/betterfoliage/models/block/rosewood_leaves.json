@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "atmospheric:block/rosewood_leaves",
+  "fluff": "betterfoliage:block/rosewood_fluff"
+}

@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "quark:block/lavender_blossom_leaves",
+  "fluff": "betterfoliage:block/lavender_blossom_fluff"
+}
