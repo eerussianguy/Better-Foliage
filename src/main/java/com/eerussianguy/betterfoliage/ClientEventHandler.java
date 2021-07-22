@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -46,9 +46,9 @@ public class ClientEventHandler
     @SuppressWarnings("deprecation")
     public static void onTextureStitch(TextureStitchEvent.Pre event)
     {
-        AtlasTexture map = event.getMap();
+        TextureAtlas map = event.getMap();
         ResourceLocation location = map.location();
-        if (location.equals(AtlasTexture.LOCATION_PARTICLES))
+        if (location.equals(TextureAtlas.LOCATION_PARTICLES))
         {
             for (String[] array : ParticleLocation.getAllLocations())
             {
@@ -64,9 +64,9 @@ public class ClientEventHandler
     @SuppressWarnings("deprecation")
     public static void afterTextureStitch(TextureStitchEvent.Post event)
     {
-        AtlasTexture atlas = event.getMap();
+        TextureAtlas atlas = event.getMap();
         ResourceLocation res = atlas.location();
-        if (res.equals(AtlasTexture.LOCATION_PARTICLES))
+        if (res.equals(TextureAtlas.LOCATION_PARTICLES))
         {
             for (ParticleLocation location : ParticleLocation.values())
             {
@@ -75,7 +75,7 @@ public class ClientEventHandler
         }
     }
 
-    private static List<TextureAtlasSprite> getList(AtlasTexture atlas, String... locations)
+    private static List<TextureAtlasSprite> getList(TextureAtlas atlas, String... locations)
     {
         List<TextureAtlasSprite> list = new ArrayList<>();
         for (String s : locations)

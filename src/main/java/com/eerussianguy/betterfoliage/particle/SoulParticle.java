@@ -2,25 +2,25 @@ package com.eerussianguy.betterfoliage.particle;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.util.Mth;
 
 import com.eerussianguy.betterfoliage.ClientEventHandler;
 import com.eerussianguy.betterfoliage.ClientForgeEventHandler;
 import com.eerussianguy.betterfoliage.ParticleLocation;
-import mcp.MethodsReturnNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class SoulParticle extends SpriteTexturedParticle
+public class SoulParticle extends TextureSheetParticle
 {
     private int ageOffset;
     private double drift;
     private boolean children;
 
-    public SoulParticle(ClientWorld world, double x, double y, double z)
+    public SoulParticle(ClientLevel world, double x, double y, double z)
     {
         super(world, x, y, z);
         hasPhysics = false;
@@ -32,7 +32,7 @@ public class SoulParticle extends SpriteTexturedParticle
         children = true;
     }
 
-    public SoulParticle(ClientWorld world, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize)
+    public SoulParticle(ClientLevel world, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize)
     {
         this(world, x, y, z);
         this.children = children;
@@ -58,7 +58,7 @@ public class SoulParticle extends SpriteTexturedParticle
             alpha *= 0.9;
         move(xd, yd, zd);
         double life = 1 - (double) age / lifetime;
-        double swirl = (MathHelper.sin((age + ageOffset) * 0.6F) - 0.5D) * life * 0.08F;
+        double swirl = (Mth.sin((age + ageOffset) * 0.6F) - 0.5D) * life * 0.08F;
         xd = swirl + drift;
         yd *= 0.98F;
         zd = swirl + drift;
@@ -70,8 +70,8 @@ public class SoulParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public ParticleRenderType getRenderType()
     {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 }

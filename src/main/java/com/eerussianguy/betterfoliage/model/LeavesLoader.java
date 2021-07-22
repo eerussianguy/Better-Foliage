@@ -5,21 +5,19 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.model.IModelLoader;
 
 import com.eerussianguy.betterfoliage.Helpers;
-import mcp.MethodsReturnNonnullByDefault;
-
-import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class LeavesLoader implements IModelLoader<LeavesModel>
 {
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager)
+    public void onResourceManagerReload(ResourceManager resourceManager)
     {
         // do nothing
     }

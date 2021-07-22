@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-import mcp.MethodsReturnNonnullByDefault;
-
 @MethodsReturnNonnullByDefault
-public class SpritePicker implements IAnimatedSprite
+public class SpritePicker implements SpriteSet
 {
     private List<TextureAtlasSprite> sprites;
 

@@ -2,17 +2,16 @@ package com.eerussianguy.betterfoliage.particle;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LeafParticle extends SpriteTexturedParticle
+public class LeafParticle extends TextureSheetParticle
 {
-    public LeafParticle(ClientWorld worldIn, double x, double y, double z)
+    public LeafParticle(ClientLevel worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
         setSize(0.02F, 0.02F);
@@ -52,8 +51,8 @@ public class LeafParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public ParticleRenderType getRenderType()
     {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 }

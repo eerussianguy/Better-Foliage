@@ -3,17 +3,17 @@ package com.eerussianguy.betterfoliage;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.FoliageColors;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.TickEvent;
@@ -38,53 +38,53 @@ public class ClientForgeEventHandler
         Entity entity = mc.getCameraEntity();
         if (entity == null) return;
 
-        ClientWorld world = (ClientWorld) entity.level;
-        if (world == null || world.getGameTime() % 2 != 0) return;
-        Vector3d pos = entity.position();
+        ClientLevel level = (ClientLevel) entity.level;
+        if (level.getGameTime() % 2 != 0) return;
+        Vec3 pos = entity.position();
 
-        Random rand = world.random;
+        Random rand = level.random;
         final int spawnDistance = BFConfig.CLIENT.particleDistance.get();
 
         for (int i = 0; i < BFConfig.CLIENT.particleAttempts.get(); i++)
         {
             BlockPos searchPos = new BlockPos(pos.add(rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance), rand.nextInt(spawnDistance) - 1, rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance)));
-            BlockState state = world.getBlockState(searchPos);
-            if (state.is(BlockTags.LEAVES) && world.isEmptyBlock(searchPos.below()))
+            BlockState state = level.getBlockState(searchPos);
+            if (state.is(BlockTags.LEAVES) && level.isEmptyBlock(searchPos.below()))
             {
-                LeafParticle particle = new LeafParticle(world, searchPos.getX() + 0.5D, searchPos.getY() - 1D, searchPos.getZ() + 0.5D);
+                LeafParticle particle = new LeafParticle(level, searchPos.getX() + 0.5D, searchPos.getY() - 1D, searchPos.getZ() + 0.5D);
 
-                if (BFConfig.CLIENT.snowballs.get() && rand.nextInt(2) == 0 && world.getBlockState(searchPos.above()).is(Blocks.SNOW))
+                if (BFConfig.CLIENT.snowballs.get() && rand.nextInt(2) == 0 && level.getBlockState(searchPos.above()).is(Blocks.SNOW))
                 {
                     addParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.SNOWBALL));
                 }
                 else if (BFConfig.CLIENT.leaves.get())
                 {
-                    world.getBiomeName(searchPos).ifPresent(key -> {
+                    level.getBiomeName(searchPos).ifPresent(key -> {
                         if (BiomeDictionary.hasType(key, BiomeDictionary.Type.CONIFEROUS))
                         {
-                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF_SPRUCE), state, world, searchPos);
+                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF_SPRUCE), state, level, searchPos);
                         }
                         else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.JUNGLE))
                         {
-                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF_JUNGLE), state, world, searchPos);
+                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF_JUNGLE), state, level, searchPos);
                         }
                         else
                         {
-                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF), state, world, searchPos);
+                            addTintedParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.LEAF), state, level, searchPos);
                         }
                     });
                 }
             }
-            else if (BFConfig.CLIENT.souls.get() && state.is(BlockTags.SOUL_FIRE_BASE_BLOCKS) && world.isEmptyBlock(searchPos.above()))
+            else if (BFConfig.CLIENT.souls.get() && state.is(BlockTags.SOUL_FIRE_BASE_BLOCKS) && level.isEmptyBlock(searchPos.above()))
             {
-                SoulParticle particle = new SoulParticle(world, searchPos.getX() + 0.5D, searchPos.getY() + 1.0D, searchPos.getZ() + 0.5D);
+                SoulParticle particle = new SoulParticle(level, searchPos.getX() + 0.5D, searchPos.getY() + 1.0D, searchPos.getZ() + 0.5D);
                 addParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.SOUL));
             }
         }
 
     }
 
-    public static void addParticle(SpriteTexturedParticle particle, List<TextureAtlasSprite> sprites)
+    public static void addParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites)
     {
         Minecraft mc = Minecraft.getInstance();
 
@@ -95,17 +95,17 @@ public class ClientForgeEventHandler
         mc.particleEngine.add(particle);
     }
 
-    public static void addTintedParticle(SpriteTexturedParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientWorld world, BlockPos pos)
+    public static void addTintedParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientLevel level, BlockPos pos)
     {
         Minecraft mc = Minecraft.getInstance();
 
         SpritePicker picker = new SpritePicker();
         picker.rebind(sprites);
 
-        int color = mc.getBlockColors().getColor(state, world, pos); // catches leaves that override default (like birch)
-        if (color == FoliageColors.getDefaultColor())
+        int color = mc.getBlockColors().getColor(state, level, pos); // catches leaves that override default (like birch)
+        if (color == FoliageColor.getDefaultColor())
         {
-            color = world.getBiome(pos).getFoliageColor(); // catches stuff like swamp that uses biome always
+            color = level.getBiome(pos).getFoliageColor(); // catches stuff like swamp that uses biome always
         }
 
         float r = ((color >> 16) & 0xFF) / 255F;

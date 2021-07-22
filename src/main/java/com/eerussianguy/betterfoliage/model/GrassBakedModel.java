@@ -6,20 +6,23 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.SimpleBakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 
 import com.eerussianguy.betterfoliage.Helpers;
-import mcp.MethodsReturnNonnullByDefault;
+import com.mojang.math.Vector3f;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -39,13 +42,13 @@ public class GrassBakedModel implements IDynamicBakedModel
     private TextureAtlasSprite topTex;
     private TextureAtlasSprite overlayTex;
 
-    private final IBakedModel[] models = new IBakedModel[16];
+    private final BakedModel[] models = new BakedModel[16];
 
-    private BlockPart core;
+    private BlockElement core;
 
     public GrassBakedModel(ResourceLocation modelLocation, ResourceLocation dirt, ResourceLocation top, ResourceLocation overlay, boolean tint)
     {
-        this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemCameraTransforms.NO_TRANSFORMS, ItemOverrideList.EMPTY.getOverrides());
+        this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemTransforms.NO_TRANSFORMS, new ArrayList<>());
 
         this.modelLocation = modelLocation;
         this.dirt = dirt;
@@ -68,39 +71,39 @@ public class GrassBakedModel implements IDynamicBakedModel
 
     public void buildCore()
     {
-        Map<Direction, BlockPartFace> mapFacesIn = Maps.newEnumMap(Direction.class);
+        Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         for (Direction d : Helpers.DIRECTIONS)
         {
             BlockFaceUV faceUV = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
             mapFacesIn.put(d, (d == Direction.UP && tint) ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
         }
-        core = new BlockPart(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
+        core = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
     }
 
     public void generateModels()
     {
         for (int meta = 0; meta < 16; meta++)
         {
-            Map<Direction, BlockPartFace> mapFacesIn = Maps.newEnumMap(Direction.class);
+            Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
             for (Direction d : Helpers.DIRECTIONS)
             {
                 BlockFaceUV faceUV = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
                 mapFacesIn.put(d, (d != Direction.DOWN && tint) ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
             }
-            BlockPart part = new BlockPart(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
-            SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrideList.EMPTY, false).particle(topTex);
+            BlockElement part = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
+            SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(topTex);
 
-            for (Map.Entry<Direction, BlockPartFace> e : core.faces.entrySet()) // we unwrap and re-wrap this every time, since its 16 distinct models
+            for (Map.Entry<Direction, BlockElementFace> e : core.faces.entrySet()) // we unwrap and re-wrap this every time, since its 16 distinct models
             {
                 Direction d = e.getKey();
                 // add the 'interior' of the block
-                builder.addCulledFace(d, Helpers.makeBakedQuad(core, e.getValue(), d == Direction.UP ? topTex : dirtTex, d, ModelRotation.X0_Y0, modelLocation));
+                builder.addCulledFace(d, Helpers.makeBakedQuad(core, e.getValue(), d == Direction.UP ? topTex : dirtTex, d, BlockModelRotation.X0_Y0, modelLocation));
             }
-            for (Map.Entry<Direction, BlockPartFace> e : part.faces.entrySet())
+            for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet())
             {
                 Direction d = e.getKey();
                 // add the overlay, be it a full covering or a 'side'
-                builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), resolveTexture(d, stateFromMeta(meta)), d, ModelRotation.X0_Y0, modelLocation));
+                builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), resolveTexture(d, stateFromMeta(meta)), d, BlockModelRotation.X0_Y0, modelLocation));
             }
             models[meta] = builder.build();
         }
@@ -108,22 +111,15 @@ public class GrassBakedModel implements IDynamicBakedModel
 
     private TextureAtlasSprite resolveTexture(Direction d, boolean[] booleans)
     {
-        switch (d)
-        {
-            case UP:
-                return topTex;
-            case DOWN:
-            default:
-                return dirtTex;
-            case NORTH:
-                return booleans[0] ? topTex : overlayTex;
-            case EAST:
-                return booleans[1] ? topTex : overlayTex;
-            case SOUTH:
-                return booleans[2] ? topTex : overlayTex;
-            case WEST:
-                return booleans[3] ? topTex : overlayTex;
-        }
+        return switch (d)
+            {
+                case UP -> topTex;
+                default -> dirtTex;
+                case NORTH -> booleans[0] ? topTex : overlayTex;
+                case EAST -> booleans[1] ? topTex : overlayTex;
+                case SOUTH -> booleans[2] ? topTex : overlayTex;
+                case WEST -> booleans[3] ? topTex : overlayTex;
+            };
     }
 
     private static boolean[] stateFromMeta(int meta)
@@ -137,6 +133,7 @@ public class GrassBakedModel implements IDynamicBakedModel
     }
 
     @Override
+    @Nonnull
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData extraData)
     {
         int meta = (state != null && extraData instanceof GrassConnectionData) ? ((GrassConnectionData) extraData).get() : 0;
@@ -144,9 +141,10 @@ public class GrassBakedModel implements IDynamicBakedModel
     }
 
     @Override
-    public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
+    @Nonnull
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
     {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         BlockPos down = pos.below();
         boolean north = world.getBlockState(mutable.setWithOffset(down, Direction.NORTH)).hasProperty(BlockStateProperties.SNOWY);
         boolean east = world.getBlockState(mutable.setWithOffset(down, Direction.EAST)).hasProperty(BlockStateProperties.SNOWY);
@@ -186,8 +184,8 @@ public class GrassBakedModel implements IDynamicBakedModel
     }
 
     @Override
-    public ItemOverrideList getOverrides()
+    public ItemOverrides getOverrides()
     {
-        return ItemOverrideList.EMPTY;
+        return ItemOverrides.EMPTY;
     }
 }

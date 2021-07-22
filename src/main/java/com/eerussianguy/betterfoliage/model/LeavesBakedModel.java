@@ -6,21 +6,23 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.SimpleBakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
-import mcp.MethodsReturnNonnullByDefault;
+import com.mojang.math.Vector3f;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -40,14 +42,14 @@ public class LeavesBakedModel implements IDynamicBakedModel
     private TextureAtlasSprite fluffTex;
 
     private final BlockModel blockModel;
-    private final IBakedModel[] crosses = new IBakedModel[(int) Math.pow(BFConfig.CLIENT.leavesCacheSize.get(), 3)];
+    private final BakedModel[] crosses = new BakedModel[(int) Math.pow(BFConfig.CLIENT.leavesCacheSize.get(), 3)];
 
-    private IBakedModel core;
-    private IBakedModel outerCore;
+    private BakedModel core;
+    private BakedModel outerCore;
 
     public LeavesBakedModel(ResourceLocation modelLocation, ResourceLocation leaves, ResourceLocation fluff, ResourceLocation overlay, boolean tintLeaves, boolean tintOverlay)
     {
-        this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemCameraTransforms.NO_TRANSFORMS, ItemOverrideList.EMPTY.getOverrides());
+        this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemTransforms.NO_TRANSFORMS, new ArrayList<>());
 
         this.modelLocation = modelLocation;
         this.leaves = leaves;
@@ -97,7 +99,7 @@ public class LeavesBakedModel implements IDynamicBakedModel
     private void buildCross(int ordinal, float x, float y, float z)
     {
         BlockFaceUV uv = new BlockFaceUV(new float[] {0, 0, 16, 16}, 0);
-        Map<Direction, BlockPartFace> mapFacesIn = Maps.newEnumMap(Direction.class);
+        Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         mapFacesIn.put(Direction.NORTH, Helpers.makeTintedFace(uv));
         mapFacesIn.put(Direction.SOUTH, Helpers.makeTintedFace(uv));
 
@@ -107,36 +109,36 @@ public class LeavesBakedModel implements IDynamicBakedModel
         from.add(moveVec);
         to.add(moveVec);
 
-        BlockPart part = new BlockPart(from, to, mapFacesIn, makeRotation(45f), false);
-        BlockPart partR = new BlockPart(from, to, mapFacesIn, makeRotation(-45f), false);
+        BlockElement part = new BlockElement(from, to, mapFacesIn, makeRotation(45f), false);
+        BlockElement partR = new BlockElement(from, to, mapFacesIn, makeRotation(-45f), false);
 
-        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrideList.EMPTY, false).particle(leavesTex);
+        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(leavesTex);
         Helpers.assembleFaces(builder, part, fluffTex, modelLocation);
         Helpers.assembleFaces(builder, partR, fluffTex, modelLocation);
 
         crosses[ordinal] = builder.build();
     }
 
-    private BlockPartRotation makeRotation(float degrees)
+    private BlockElementRotation makeRotation(float degrees)
     {
-        return new BlockPartRotation(new Vector3f(8f * 0.0625f, 0f, 8f * 0.0625f), Axis.Y, degrees, false);
+        return new BlockElementRotation(new Vector3f(8f * 0.0625f, 0f, 8f * 0.0625f), Direction.Axis.Y, degrees, false);
     }
 
-    private IBakedModel buildBlock(TextureAtlasSprite tex, boolean tint)
+    private BakedModel buildBlock(TextureAtlasSprite tex, boolean tint)
     {
-        Map<Direction, BlockPartFace> mapFacesIn = Maps.newEnumMap(Direction.class);
+        Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         for (Direction d : Helpers.DIRECTIONS)
         {
             BlockFaceUV faceUV = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
             mapFacesIn.put(d, tint ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
         }
-        BlockPart part = new BlockPart(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
-        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrideList.EMPTY, false).particle(tex);
+        BlockElement part = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
+        SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(tex);
 
-        for (Map.Entry<Direction, BlockPartFace> e : part.faces.entrySet())
+        for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet())
         {
             Direction d = e.getKey();
-            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), tex, d, ModelRotation.X0_Y0, modelLocation));
+            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), tex, d, BlockModelRotation.X0_Y0, modelLocation));
         }
 
         return builder.build();
@@ -149,7 +151,7 @@ public class LeavesBakedModel implements IDynamicBakedModel
         List<BakedQuad> coreQuads = core.getQuads(state, side, rand, extraData);
 
         if (state == null) return coreQuads;
-        LeavesOrdinalData data = extraData instanceof LeavesOrdinalData ? (LeavesOrdinalData) extraData : new LeavesOrdinalData();
+        LeavesOrdinalData data = extraData instanceof LeavesOrdinalData ? (LeavesOrdinalData) extraData : new LeavesOrdinalData(BlockPos.ZERO);
 
         List<BakedQuad> quads = new ArrayList<>(coreQuads);
         List<BakedQuad> crossQuads = crosses[data.get()].getQuads(state, side, rand, extraData);
@@ -164,7 +166,7 @@ public class LeavesBakedModel implements IDynamicBakedModel
 
     @Override
     @Nonnull
-    public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
     {
         return new LeavesOrdinalData(pos);
     }
@@ -200,8 +202,8 @@ public class LeavesBakedModel implements IDynamicBakedModel
     }
 
     @Override
-    public ItemOverrideList getOverrides()
+    public ItemOverrides getOverrides()
     {
-        return ItemOverrideList.EMPTY;
+        return ItemOverrides.EMPTY;
     }
 }
