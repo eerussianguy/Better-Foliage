@@ -46,8 +46,8 @@ public class ClientEventHandler
     @SuppressWarnings("deprecation")
     public static void onTextureStitch(TextureStitchEvent.Pre event)
     {
-        TextureAtlas map = event.getMap();
-        ResourceLocation location = map.location();
+        final TextureAtlas atlas = event.getAtlas();
+        final ResourceLocation location = atlas.location();
         if (location.equals(TextureAtlas.LOCATION_PARTICLES))
         {
             for (String[] array : ParticleLocation.getAllLocations())
@@ -64,7 +64,7 @@ public class ClientEventHandler
     @SuppressWarnings("deprecation")
     public static void afterTextureStitch(TextureStitchEvent.Post event)
     {
-        TextureAtlas atlas = event.getMap();
+        final TextureAtlas atlas = event.getAtlas();
         ResourceLocation res = atlas.location();
         if (res.equals(TextureAtlas.LOCATION_PARTICLES))
         {

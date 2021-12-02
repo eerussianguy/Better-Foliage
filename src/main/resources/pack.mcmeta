@@ -1,7 +1,7 @@
 {
     "pack": {
         "description": "BetterFoliage Resources",
-        "pack_format": 6,
+        "pack_format": 8,
         "_comment": "The better BetterFoliage port"
     }
 }

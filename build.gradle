@@ -16,11 +16,11 @@ version = '2.0.0'
 group = 'com.eerussianguy.betterfoliage' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'betterfoliage'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+println("Java: ${System.getProperty("java.version")} JVM: ${System.getProperty("java.vm.version")} (${System.getProperty("java.vendor")}) Arch: ${System.getProperty("os.arch")}")
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -95,7 +95,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.0'
+    minecraft 'net.minecraftforge:forge:1.18-38.0.8'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -107,7 +107,7 @@ jar {
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"eerussianguy",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

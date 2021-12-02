@@ -1,6 +1,5 @@
 package com.eerussianguy.betterfoliage;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.ForgeConfig;
@@ -20,11 +19,6 @@ import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 public class BetterFoliage
 {
     private static final Logger LOGGER = LogManager.getLogger();
-
-    public static Logger getLogger()
-    {
-        return LOGGER;
-    }
 
     public static final String MOD_ID = "betterfoliage";
 
