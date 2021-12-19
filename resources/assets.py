@@ -3,16 +3,10 @@ from mcresources import utils
 
 
 def generate(rm: ResourceManager):
-    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce')
+    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea')
 
     for wood in vanilla_woods:
-        direct_block_model(rm, 'betterfoliage:%s_leaves' % wood, {
-            'loader': 'betterfoliage:leaves',
-            'leaves': 'minecraft:block/%s_leaves' % wood,
-            'fluff': 'betterfoliage:block/%s_fluff' % wood
-        })
-
-        rm.blockstate('minecraft:%s_leaves' % wood, model='betterfoliage:block/%s_leaves' % wood)
+        leaves(rm, '%s_leaves' % wood, '%s_fluff' % wood)
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -78,6 +72,16 @@ def generate(rm: ResourceManager):
         'overlay': 'minecraft:block/podzol_side',
         'tint': False
     })
+
+
+def leaves(rm: ResourceManager, name: str, fluff: str, overlay: str = None):
+    rm.blockstate('minecraft:%s' % name, model='betterfoliage:block/%s' % name)
+    direct_block_model(rm, 'betterfoliage:%s' % name, utils.del_none({
+        'loader': 'betterfoliage:leaves',
+        'leaves': 'minecraft:block/%s' % name,
+        'fluff': 'betterfoliage:block/%s' % fluff,
+        'overlay': overlay
+    }))
 
 
 def direct_block_model(rm: ResourceManager, location: utils.ResourceIdentifier, json: utils.Json):

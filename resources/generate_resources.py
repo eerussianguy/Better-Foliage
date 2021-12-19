@@ -1,4 +1,4 @@
-from mcresources import ResourceManager, clean_generated_resources
+from mcresources import ResourceManager
 import assets
 
 
