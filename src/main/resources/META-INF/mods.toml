@@ -22,9 +22,3 @@ Most changes are configurable via resource pack.
     versionRange="[1.18,1.19)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.betterfoliage]]
-    modId="biomesoplenty"
-    mandatory=false
-    versionRange="[15,)"
-    ordering="AFTER"
-    side="BOTH"
