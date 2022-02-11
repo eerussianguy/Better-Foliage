@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "minecraft:block/oak_leaves",
+  "fluff": "betterfoliage:block/oak_fluff",
+  "overlay": "enhancedfarming:block/leaves/pear_leaves_blooming"
+}

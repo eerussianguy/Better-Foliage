@@ -46,7 +46,8 @@ def generate(rm: ResourceManager):
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/grass_block_top',
         'overlay': 'minecraft:block/grass_block_side_overlay',
-        'tint': True
+        'tint': True,
+        'grass': 'betterfoliage:block/better_grass'
     })
 
     direct_block_model(rm, 'betterfoliage:snowy_grass_block', {
@@ -54,7 +55,8 @@ def generate(rm: ResourceManager):
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/snow',
         'overlay': 'minecraft:block/grass_block_snow',
-        'tint': False
+        'tint': False,
+        'grass': 'betterfoliage:block/better_grass_snowed'
     })
 
     direct_block_model(rm, 'betterfoliage:mycelium', {
@@ -62,7 +64,8 @@ def generate(rm: ResourceManager):
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/mycelium_top',
         'overlay': 'minecraft:block/mycelium_side',
-        'tint': False
+        'tint': False,
+        'grass': 'betterfoliage:block/better_mycelium'
     })
 
     direct_block_model(rm, 'betterfoliage:podzol', {
@@ -72,6 +75,25 @@ def generate(rm: ResourceManager):
         'overlay': 'minecraft:block/podzol_side',
         'tint': False
     })
+
+    rm.block_model('better_grass', {'cross': 'betterfoliage:block/better_grass'}, parent='betterfoliage:block/tinted_cross_high')
+    rm.block_model('better_mycelium', {'cross': 'betterfoliage:block/better_mycelium'}, parent='betterfoliage:block/cross_high')
+    rm.block_model('better_grass_snowed', {'cross': 'betterfoliage:block/better_grass_snowed'}, parent='betterfoliage:block/cross_high')
+
+    # enhanced farming
+    for fruit in ('apple', 'avocado', 'banana', 'cherry', 'lemon', 'mango', 'olive', 'orange', 'pear'):
+        base = 'oak' if fruit != 'banana' else 'jungle'
+        leaves_model_only(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
+        leaves_model_only(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
+
+
+def leaves_model_only(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
+    direct_block_model(rm, model, utils.del_none({
+        'loader': 'betterfoliage:leaves',
+        'leaves': block,
+        'fluff': fluff,
+        'overlay': overlay
+    }))
 
 
 def leaves(rm: ResourceManager, name: str, fluff: str, overlay: str = None):

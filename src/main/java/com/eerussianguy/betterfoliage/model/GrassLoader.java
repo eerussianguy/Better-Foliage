@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.model.IModelLoader;
 
+import com.eerussianguy.betterfoliage.Helpers;
+
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -27,7 +29,8 @@ public class GrassLoader implements IModelLoader<GrassModel>
         ResourceLocation top = new ResourceLocation(json.get("top").getAsString());
         ResourceLocation overlay = new ResourceLocation(json.get("overlay").getAsString());
         boolean tint = json.get("tint").getAsBoolean();
+        ResourceLocation grass = Helpers.getOrEmpty(json, "grass");
 
-        return new GrassModel(dirt, top, overlay, tint);
+        return new GrassModel(dirt, top, overlay, tint, grass);
     }
 }

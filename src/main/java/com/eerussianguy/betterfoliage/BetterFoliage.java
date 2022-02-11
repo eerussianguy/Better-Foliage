@@ -2,6 +2,9 @@ package com.eerussianguy.betterfoliage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -9,7 +12,7 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
@@ -28,16 +31,18 @@ public class BetterFoliage
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> "Nothing", (remote, isServer) -> true));
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::clientSetup);
 
         BFConfig.init();
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
+    private void clientSetup(final FMLClientSetupEvent event)
     {
-        if (BFConfig.CLIENT.forceForgeLighting.get() && !ModList.get().isLoaded("optifine"))
+        if (BFConfig.CLIENT.forceForgeLighting.get() && !ModList.get().isLoaded("optifine")) //todo: the optifine bit does not work IIRC
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }
+
+        ItemBlockRenderTypes.setRenderLayer(Blocks.MYCELIUM, RenderType.cutout());
     }
 }

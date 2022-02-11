@@ -1,0 +1,6 @@
+{
+  "parent": "betterfoliage:block/tinted_cross_high",
+  "textures": {
+    "cross": "minecraft:block/grass"
+  }
+}

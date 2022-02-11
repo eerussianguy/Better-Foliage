@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,8 +39,12 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void onModelRegister(ModelRegistryEvent event)
     {
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(MOD_ID, "leaves"), new LeavesLoader());
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(MOD_ID, "grass"), new GrassLoader());
+        ModelLoaderRegistry.registerLoader(Helpers.identifier("leaves"), new LeavesLoader());
+        ModelLoaderRegistry.registerLoader(Helpers.identifier("grass"), new GrassLoader());
+
+        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_grass"));
+        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_grass_snowed"));
+        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_mycelium"));
     }
 
     @SubscribeEvent
@@ -54,7 +59,7 @@ public class ClientEventHandler
             {
                 for (String s : array)
                 {
-                    event.addSprite(new ResourceLocation(MOD_ID, "particle/" + s));
+                    event.addSprite(Helpers.identifier("particle/" + s));
                 }
             }
         }
@@ -80,7 +85,7 @@ public class ClientEventHandler
         List<TextureAtlasSprite> list = new ArrayList<>();
         for (String s : locations)
         {
-            list.add(atlas.getSprite(new ResourceLocation(MOD_ID, "particle/" + s)));
+            list.add(atlas.getSprite(Helpers.identifier("particle/" + s)));
         }
         return list;
     }

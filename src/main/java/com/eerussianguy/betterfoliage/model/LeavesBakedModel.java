@@ -17,7 +17,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
@@ -26,7 +25,7 @@ import com.mojang.math.Vector3f;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class LeavesBakedModel implements IDynamicBakedModel
+public class LeavesBakedModel extends BFBakedModel
 {
     public static List<LeavesBakedModel> INSTANCES = new ArrayList<>();
 
@@ -98,10 +97,9 @@ public class LeavesBakedModel implements IDynamicBakedModel
 
     private void buildCross(int ordinal, float x, float y, float z)
     {
-        BlockFaceUV uv = new BlockFaceUV(new float[] {0, 0, 16, 16}, 0);
         Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
-        mapFacesIn.put(Direction.NORTH, Helpers.makeTintedFace(uv));
-        mapFacesIn.put(Direction.SOUTH, Helpers.makeTintedFace(uv));
+        mapFacesIn.put(Direction.NORTH, Helpers.makeTintedFace(Helpers.UV_DEFAULT));
+        mapFacesIn.put(Direction.SOUTH, Helpers.makeTintedFace(Helpers.UV_DEFAULT));
 
         Vector3f from = new Vector3f(-8f, -8f, 8f);
         Vector3f to = new Vector3f(24f, 24f, 8f);
@@ -129,8 +127,7 @@ public class LeavesBakedModel implements IDynamicBakedModel
         Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         for (Direction d : Helpers.DIRECTIONS)
         {
-            BlockFaceUV faceUV = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
-            mapFacesIn.put(d, tint ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
+            mapFacesIn.put(d, tint ? Helpers.makeTintedFace(Helpers.UV_DEFAULT) : Helpers.makeFace(Helpers.UV_DEFAULT));
         }
         BlockElement part = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
         SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(tex);
@@ -172,38 +169,9 @@ public class LeavesBakedModel implements IDynamicBakedModel
     }
 
     @Override
-    public boolean useAmbientOcclusion()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean isGui3d()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean usesBlockLight()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean isCustomRenderer()
-    {
-        return false;
-    }
-
-    @Override
     public TextureAtlasSprite getParticleIcon()
     {
         return leavesTex;
     }
 
-    @Override
-    public ItemOverrides getOverrides()
-    {
-        return ItemOverrides.EMPTY;
-    }
 }

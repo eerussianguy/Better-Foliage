@@ -4,5 +4,6 @@
   "dirt": "minecraft:block/dirt",
   "top": "minecraft:block/mycelium_top",
   "overlay": "minecraft:block/mycelium_side",
-  "tint": false
+  "tint": false,
+  "grass": "betterfoliage:block/better_mycelium"
 }

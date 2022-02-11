@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "minecraft:block/jungle_leaves",
+  "fluff": "betterfoliage:block/jungle_fluff",
+  "overlay": "enhancedfarming:block/leaves/banana_leaves_blooming"
+}

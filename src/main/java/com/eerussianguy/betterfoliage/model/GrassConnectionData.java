@@ -3,8 +3,9 @@ package com.eerussianguy.betterfoliage.model;
 public class GrassConnectionData implements IModelDataBlank
 {
     private final int meta;
+    private final boolean up;
 
-    public GrassConnectionData(boolean north, boolean east, boolean south, boolean west)
+    public GrassConnectionData(boolean north, boolean east, boolean south, boolean west, boolean up)
     {
         int i = 0;
         if (north)
@@ -17,10 +18,17 @@ public class GrassConnectionData implements IModelDataBlank
             i |= 8;
 
         meta = i;
+        this.up = up;
     }
 
     public int get()
     {
         return meta;
     }
+
+    public boolean hasUp()
+    {
+        return up;
+    }
+
 }
