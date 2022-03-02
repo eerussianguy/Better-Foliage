@@ -8,8 +8,8 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 
-import com.eerussianguy.betterfoliage.ClientEventHandler;
-import com.eerussianguy.betterfoliage.ClientForgeEventHandler;
+import com.eerussianguy.betterfoliage.EventHandler;
+import com.eerussianguy.betterfoliage.Helpers;
 import com.eerussianguy.betterfoliage.ParticleLocation;
 
 @MethodsReturnNonnullByDefault
@@ -65,7 +65,7 @@ public class SoulParticle extends TextureSheetParticle
         if (children && (age == 5 || age == 10 || age == 15))
         {
             SoulParticle particle = new SoulParticle(level, x, y - (0.2D * age / 5), z, false, drift, ageOffset, yd, age, quadSize);
-            ClientForgeEventHandler.addParticle(particle, ClientEventHandler.MAP.get(ParticleLocation.SOUL_TRAIL));
+            Helpers.addParticle(particle, EventHandler.MAP.get(ParticleLocation.SOUL_TRAIL));
         }
     }
 

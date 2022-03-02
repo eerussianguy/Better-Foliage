@@ -1,6 +1,6 @@
 
 modLoader="javafml" #mandatory
-loaderVersion="[38,)"
+loaderVersion="[40,)"
 license="MIT License"
 issueTrackerURL="https://github.com/eerussianguy/Better-Foliage/issues" #optional
 [[mods]] #mandatory

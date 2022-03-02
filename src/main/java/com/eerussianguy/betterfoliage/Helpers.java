@@ -2,20 +2,28 @@ package com.eerussianguy.betterfoliage;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.SimpleBakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.state.BlockState;
+
+import com.eerussianguy.betterfoliage.particle.SpritePicker;
 
 import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 
@@ -97,5 +105,39 @@ public class Helpers
             f[i] = min * t + max * (1 - t);
         }
         return f;
+    }
+
+    public static void addParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites)
+    {
+        Minecraft mc = Minecraft.getInstance();
+
+        SpritePicker picker = new SpritePicker();
+        picker.rebind(sprites);
+
+        particle.pickSprite(picker);
+        mc.particleEngine.add(particle);
+    }
+
+    static void addTintedParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientLevel level, BlockPos pos)
+    {
+        Minecraft mc = Minecraft.getInstance();
+
+        SpritePicker picker = new SpritePicker();
+        picker.rebind(sprites);
+
+        int color = mc.getBlockColors().getColor(state, level, pos); // catches leaves that override default (like birch)
+        if (color == FoliageColor.getDefaultColor())
+        {
+            color = level.getBiome(pos).value().getFoliageColor(); // catches stuff like swamp that uses biome always
+        }
+
+        float r = ((color >> 16) & 0xFF) / 255F;
+        float g = ((color >> 8) & 0xFF) / 255F;
+        float b = (color & 0xFF) / 255F;
+        //float a = ((color >> 24) & 0xFF) / 255F;
+
+        particle.pickSprite(picker);
+        particle.setColor(r, g, b);
+        mc.particleEngine.add(particle);
     }
 }
