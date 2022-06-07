@@ -41,8 +41,7 @@ def generate(rm: ResourceManager):
         'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block'}
     })
 
-    direct_block_model(rm, 'betterfoliage:grass_block', {
-        'loader': 'betterfoliage:grass',
+    rm.custom_block_model('betterfoliage:grass_block', 'betterfoliage:grass', {
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/grass_block_top',
         'overlay': 'minecraft:block/grass_block_side_overlay',
@@ -50,8 +49,7 @@ def generate(rm: ResourceManager):
         'grass': 'betterfoliage:block/better_grass'
     })
 
-    direct_block_model(rm, 'betterfoliage:snowy_grass_block', {
-        'loader': 'betterfoliage:grass',
+    rm.custom_block_model('betterfoliage:snowy_grass_block', 'betterfoliage:grass', {
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/snow',
         'overlay': 'minecraft:block/grass_block_snow',
@@ -59,8 +57,7 @@ def generate(rm: ResourceManager):
         'grass': 'betterfoliage:block/better_grass_snowed'
     })
 
-    direct_block_model(rm, 'betterfoliage:mycelium', {
-        'loader': 'betterfoliage:grass',
+    rm.custom_block_model('betterfoliage:mycelium', 'betterfoliage:grass', {
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/mycelium_top',
         'overlay': 'minecraft:block/mycelium_side',
@@ -68,8 +65,7 @@ def generate(rm: ResourceManager):
         'grass': 'betterfoliage:block/better_mycelium'
     })
 
-    direct_block_model(rm, 'betterfoliage:podzol', {
-        'loader': 'betterfoliage:grass',
+    rm.custom_block_model('betterfoliage:podzol', 'betterfoliage:grass', {
         'dirt': 'minecraft:block/dirt',
         'top': 'minecraft:block/podzol_top',
         'overlay': 'minecraft:block/podzol_side',
@@ -88,24 +84,17 @@ def generate(rm: ResourceManager):
 
 
 def leaves_model_only(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
-    direct_block_model(rm, model, utils.del_none({
-        'loader': 'betterfoliage:leaves',
+    rm.custom_block_model(model, 'betterfoliage:leaves', {
         'leaves': block,
         'fluff': fluff,
         'overlay': overlay
-    }))
+    })
 
 
 def leaves(rm: ResourceManager, name: str, fluff: str, overlay: str = None):
     rm.blockstate('minecraft:%s' % name, model='betterfoliage:block/%s' % name)
-    direct_block_model(rm, 'betterfoliage:%s' % name, utils.del_none({
-        'loader': 'betterfoliage:leaves',
+    rm.custom_block_model('betterfoliage:%s' % name, 'betterfoliage:leaves', {
         'leaves': 'minecraft:block/%s' % name,
         'fluff': 'betterfoliage:block/%s' % fluff,
         'overlay': overlay
-    }))
-
-
-def direct_block_model(rm: ResourceManager, location: utils.ResourceIdentifier, json: utils.Json):
-    res = utils.resource_location(rm.domain, location)
-    rm.write((*rm.resource_dir, 'assets', res.domain, 'models', 'block', res.path), json)
+    })
