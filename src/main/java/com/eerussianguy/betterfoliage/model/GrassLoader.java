@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.client.model.IModelLoader;
 
 import com.eerussianguy.betterfoliage.Helpers;
@@ -25,11 +26,11 @@ public class GrassLoader implements IModelLoader<GrassModel>
     @Override
     public GrassModel read(JsonDeserializationContext deserializationContext, JsonObject json)
     {
-        ResourceLocation dirt = new ResourceLocation(json.get("dirt").getAsString());
-        ResourceLocation top = new ResourceLocation(json.get("top").getAsString());
-        ResourceLocation overlay = new ResourceLocation(json.get("overlay").getAsString());
-        boolean tint = json.get("tint").getAsBoolean();
-        ResourceLocation grass = Helpers.getOrEmpty(json, "grass");
+        ResourceLocation dirt = Helpers.requireID(json, "dirt");
+        ResourceLocation top = Helpers.requireID(json, "top");
+        ResourceLocation overlay = Helpers.requireID(json, "overlay");
+        boolean tint = GsonHelper.getAsBoolean(json, "tint", false);
+        ResourceLocation grass = Helpers.identifierOrEmpty(json, "grass");
 
         return new GrassModel(dirt, top, overlay, tint, grass);
     }

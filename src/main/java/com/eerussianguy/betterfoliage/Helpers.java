@@ -20,6 +20,7 @@ import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -50,7 +51,12 @@ public class Helpers
         return new BlockElementFace(null, -1, "", uv);
     }
 
-    public static ResourceLocation getOrEmpty(JsonObject json, String member)
+    public static ResourceLocation requireID(JsonObject json, String member)
+    {
+        return new ResourceLocation(GsonHelper.getAsString(json, member, EMPTY.toString()));
+    }
+
+    public static ResourceLocation identifierOrEmpty(JsonObject json, String member)
     {
         if (!json.has(member)) return EMPTY;
         return new ResourceLocation(json.get(member).getAsString());
