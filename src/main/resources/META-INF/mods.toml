@@ -22,3 +22,27 @@ Most changes are configurable via resource pack.
     versionRange="[1.18,1.19)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.betterfoliage]]
+    modId="biomesoplenty"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="BEFORE"
+    side="BOTH"
+[[dependencies.betterfoliage]]
+    modId="quark"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="BEFORE"
+    side="BOTH"
+[[dependencies.betterfoliage]]
+    modId="atmospheric"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="BEFORE"
+    side="BOTH"
+[[dependencies.betterfoliage]]
+    modId="tfc"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="BEFORE"
+    side="BOTH"

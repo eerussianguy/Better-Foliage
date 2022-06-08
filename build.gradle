@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -12,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '3.0.3'
+version = '3.1.0'
 group = 'com.eerussianguy.betterfoliage' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'betterfoliage'
 
@@ -27,8 +28,9 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'REGISTRIES'
-
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -41,26 +43,10 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'REGISTRIES'
-
             property 'forge.logging.console.level', 'debug'
-
-            mods {
-                betterfoliage {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'betterfoliage', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 betterfoliage {
@@ -75,7 +61,16 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.1'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.48'
+
+    //runtimeOnly fg.deobf('bop:BiomesOPlenty-1.18.2:16.0.0.109-universal')
+    //runtimeOnly fg.deobf('tb:TerraBlender-forge-1.18.2:1.1.0.102')
+}
+
+repositories {
+    flatDir {
+        dir 'libs'
+    }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -86,7 +81,7 @@ jar {
             "Specification-Vendor": "eerussianguy",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
+            "Implementation-Version": "${archiveVersion}",
             "Implementation-Vendor" :"eerussianguy",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
