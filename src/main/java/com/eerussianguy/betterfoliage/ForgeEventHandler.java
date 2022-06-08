@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -41,7 +42,7 @@ public class ForgeEventHandler
         if (level.getGameTime() % 2 != 0) return;
         Vec3 pos = entity.position();
 
-        Random rand = level.random;
+        RandomSource rand = level.random;
         final int spawnDistance = BFConfig.CLIENT.particleDistance.get();
 
         for (int i = 0; i < BFConfig.CLIENT.particleAttempts.get(); i++)

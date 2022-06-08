@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.RandomSource;
 
 @MethodsReturnNonnullByDefault
 public class SpritePicker implements SpriteSet
@@ -15,12 +16,14 @@ public class SpritePicker implements SpriteSet
 
     public SpritePicker() { }
 
+    @Override
     public TextureAtlasSprite get(int age, int lifetime)
     {
         return sprites.get(age * (sprites.size() - 1) / lifetime);
     }
 
-    public TextureAtlasSprite get(Random rand)
+    @Override
+    public TextureAtlasSprite get(RandomSource rand)
     {
         return sprites.get(rand.nextInt(sprites.size()));
     }

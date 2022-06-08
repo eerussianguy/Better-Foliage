@@ -3,7 +3,7 @@ from mcresources import utils
 
 
 def generate(rm: ResourceManager):
-    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea')
+    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove')
 
     for wood in vanilla_woods:
         leaves(rm, '%s_leaves' % wood, '%s_fluff' % wood)
