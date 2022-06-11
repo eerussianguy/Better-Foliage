@@ -11,6 +11,7 @@ displayURL="https://github.com/eerussianguy/Better-Foliage" #optional
 logoFile="examplemod.png" #optional
 credits="Paint_Ninja for the commission" #optional
 authors="EERussianguy, PaintNinja" #optional
+displayTest="IGNORE_ALL_VERSION"
 description='''
 A slim port of Better Foliage for 1.16 and beyond.
 
