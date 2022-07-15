@@ -11,12 +11,12 @@ import net.minecraft.client.particle.TextureSheetParticle;
 @MethodsReturnNonnullByDefault
 public class LeafParticle extends TextureSheetParticle
 {
-    public LeafParticle(ClientLevel worldIn, double x, double y, double z)
+    public LeafParticle(ClientLevel level, double x, double y, double z)
     {
-        super(worldIn, x, y, z);
+        super(level, x, y, z);
         setSize(0.02F, 0.02F);
         quadSize *= random.nextFloat() * 1.2F + 0.2F;
-        double rainingAdd = worldIn.isRaining() ? 1D : 0D;
+        double rainingAdd = level.isRaining() ? 1D : 0D;
         xd = (Math.random() * 2.0D - 1.0D) * 0.02D + rainingAdd;
         yd = -0.2D + (random.nextFloat() / 6f);
         zd = (Math.random() * 2.0D - 1.0D) * 0.02D + rainingAdd;

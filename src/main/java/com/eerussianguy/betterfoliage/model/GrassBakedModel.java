@@ -8,6 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Maps;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -20,17 +21,21 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.NamedRenderTypeManager;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
 import com.mojang.math.Vector3f;
+import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GrassBakedModel extends BFBakedModel
 {
     public static List<GrassBakedModel> INSTANCES = new ArrayList<>();
+    public static final ChunkRenderTypeSet RENDER_TYPES = ChunkRenderTypeSet.of(RenderType.cutout());
 
     private final BlockModel blockModel;
 
@@ -98,7 +103,7 @@ public class GrassBakedModel extends BFBakedModel
             final int fMeta = meta;
             Helpers.assembleFacesConditional(builder, core, direction -> direction == Direction.UP ? topTex : dirtTex, modelLocation);
             Helpers.assembleFacesConditional(builder, part, direction -> resolveTexture(direction, stateFromMeta(fMeta)), modelLocation);
-            models[meta] = builder.build();
+            models[meta] = builder.build(NamedRenderTypeManager.get(new ResourceLocation("cutout_mipped")));
         }
     }
 
@@ -127,24 +132,29 @@ public class GrassBakedModel extends BFBakedModel
 
     @Override
     @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType)
     {
-        if (extraData instanceof GrassConnectionData grassData)
+        if (extraData.has(GrassConnectionData.PROPERTY))
         {
-            final int meta = grassData.get();
-            List<BakedQuad> quads = new ArrayList<>(models[meta].getQuads(state, side, rand, extraData));
-            if (grassData.hasUp() && !grass.equals(Helpers.EMPTY) && rand.nextInt(BFConfig.CLIENT.extraGrassRarity.get()) == 0)
+            GrassConnectionData grassData = extraData.get(GrassConnectionData.PROPERTY);
+            if (grassData != null)
             {
-                final BakedModel grassModel = Minecraft.getInstance().getModelManager().getModel(grass);
-                quads.addAll(grassModel.getQuads(state, side, rand, extraData));
+                final int meta = grassData.get();
+                List<BakedQuad> quads = new ArrayList<>(models[meta].getQuads(state, side, rand, extraData, renderType));
+                if (grassData.hasUp() && !grass.equals(Helpers.EMPTY) && rand.nextInt(BFConfig.CLIENT.extraGrassRarity.get()) == 0)
+                {
+                    final BakedModel grassModel = Minecraft.getInstance().getModelManager().getModel(grass);
+                    quads.addAll(grassModel.getQuads(state, side, rand, extraData, renderType));
+                }
+                return quads;
             }
-            return quads;
         }
-        return models[0].getQuads(state, side, rand, extraData);
+        return models[0].getQuads(state, side, rand, extraData, renderType);
     }
+
     @Override
     @Nonnull
-    public IModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
+    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData extraData)
     {
         final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         final BlockPos down = pos.below();
@@ -154,12 +164,18 @@ public class GrassBakedModel extends BFBakedModel
         final boolean west = level.getBlockState(mutable.setWithOffset(down, Direction.WEST)).hasProperty(BlockStateProperties.SNOWY);
         final BlockState upState = level.getBlockState(mutable.setWithOffset(pos, Direction.UP));
         final boolean up = upState.isAir() || upState.is(Blocks.SNOW);
-        return new GrassConnectionData(north, east, south, west, up);
+        return extraData.derive().with(GrassConnectionData.PROPERTY, new GrassConnectionData(north, east, south, west, up)).build();
     }
 
     @Override
     public TextureAtlasSprite getParticleIcon()
     {
         return dirtTex;
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    {
+        return RENDER_TYPES;
     }
 }

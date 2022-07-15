@@ -7,17 +7,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -52,6 +46,7 @@ public class EventHandler
         bus.addListener(EventHandler::clientSetup);
         bus.addListener(EventHandler::onModelBake);
         bus.addListener(EventHandler::onModelRegister);
+        bus.addListener(EventHandler::onLoaderRegister);
         bus.addListener(EventHandler::onTextureStitch);
         bus.addListener(EventHandler::afterTextureStitch);
     }
@@ -62,24 +57,25 @@ public class EventHandler
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }
-
-        ItemBlockRenderTypes.setRenderLayer(Blocks.MYCELIUM, RenderType.cutout());
     }
 
-    private static void onModelBake(final ModelBakeEvent event)
+    private static void onModelBake(final ModelEvent.BakingCompleted event)
     {
         LeavesBakedModel.INSTANCES.forEach(LeavesBakedModel::init);
         GrassBakedModel.INSTANCES.forEach(GrassBakedModel::init);
     }
 
-    private static void onModelRegister(final ModelRegistryEvent event)
+    private static void onLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
     {
-        ModelLoaderRegistry.registerLoader(Helpers.identifier("leaves"), new LeavesLoader());
-        ModelLoaderRegistry.registerLoader(Helpers.identifier("grass"), new GrassLoader());
+        event.register("leaves", new LeavesLoader());
+        event.register("grass", new GrassLoader());
+    }
 
-        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_grass"));
-        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_grass_snowed"));
-        ForgeModelBakery.addSpecialModel(Helpers.identifier("block/better_mycelium"));
+    private static void onModelRegister(final ModelEvent.RegisterAdditional event)
+    {
+        event.register(Helpers.identifier("block/better_grass"));
+        event.register(Helpers.identifier("block/better_grass_snowed"));
+        event.register(Helpers.identifier("block/better_mycelium"));
     }
 
     @SuppressWarnings("deprecation")

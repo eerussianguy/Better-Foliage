@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '4.0.2'
+version = '4.0.3'
 group = 'com.eerussianguy.betterfoliage' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'betterfoliage'
 
@@ -61,7 +61,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.1'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.94'
 
     //runtimeOnly fg.deobf('bop:BiomesOPlenty-1.18.2:16.0.0.109-universal')
     //runtimeOnly fg.deobf('tb:TerraBlender-forge-1.18.2:1.1.0.102')

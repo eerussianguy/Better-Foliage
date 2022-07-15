@@ -6,25 +6,18 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraftforge.client.model.IModelLoader;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
 import com.eerussianguy.betterfoliage.Helpers;
 
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GrassLoader implements IModelLoader<GrassModel>
+public class GrassLoader implements IGeometryLoader<GrassModel>
 {
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager)
-    {
-        // do nothing
-    }
-
-    @Override
-    public GrassModel read(JsonDeserializationContext deserializationContext, JsonObject json)
+    public GrassModel read(JsonObject json, JsonDeserializationContext deserializationContext)
     {
         ResourceLocation dirt = Helpers.requireID(json, "dirt");
         ResourceLocation top = Helpers.requireID(json, "top");

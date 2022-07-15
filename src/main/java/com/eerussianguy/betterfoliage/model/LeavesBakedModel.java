@@ -7,22 +7,23 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.BlockModelRotation;
-import net.minecraft.client.resources.model.SimpleBakedModel;
+import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.NamedRenderTypeManager;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
 import com.mojang.math.Vector3f;
+import org.jetbrains.annotations.NotNull;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -115,7 +116,7 @@ public class LeavesBakedModel extends BFBakedModel
         Helpers.assembleFaces(builder, part, fluffTex, modelLocation);
         Helpers.assembleFaces(builder, partR, fluffTex, modelLocation);
 
-        crosses[ordinal] = builder.build();
+        crosses[ordinal] = builder.build(NamedRenderTypeManager.get(new ResourceLocation("cutout_mipped")));
     }
 
     private BlockElementRotation makeRotation(float degrees)
@@ -139,34 +140,38 @@ public class LeavesBakedModel extends BFBakedModel
             builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), tex, d, BlockModelRotation.X0_Y0, modelLocation));
         }
 
-        return builder.build();
+        return builder.build(NamedRenderTypeManager.get(new ResourceLocation("cutout_mipped")));
     }
 
     @Override
     @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType)
     {
-        List<BakedQuad> coreQuads = core.getQuads(state, side, rand, extraData);
-
-        if (state == null) return coreQuads;
-        LeavesOrdinalData data = extraData instanceof LeavesOrdinalData ? (LeavesOrdinalData) extraData : new LeavesOrdinalData(BlockPos.ZERO);
-
-        List<BakedQuad> quads = new ArrayList<>(coreQuads);
-        List<BakedQuad> crossQuads = crosses[data.get()].getQuads(state, side, rand, extraData);
-        quads.addAll(crossQuads);
-        if (isOverlay)
+        List<BakedQuad> coreQuads = core.getQuads(state, side, rand, extraData, renderType);
+        if (state != null)
         {
-            List<BakedQuad> outQuads = outerCore.getQuads(state, side, rand, extraData);
-            quads.addAll(outQuads);
+            LeavesOrdinalData data = extraData.has(LeavesOrdinalData.PROPERTY) ? extraData.get(LeavesOrdinalData.PROPERTY) : new LeavesOrdinalData(BlockPos.ZERO);
+            if (data != null)
+            {
+                List<BakedQuad> quads = new ArrayList<>(coreQuads);
+                List<BakedQuad> crossQuads = crosses[data.get()].getQuads(state, side, rand, extraData, renderType);
+                quads.addAll(crossQuads);
+                if (isOverlay)
+                {
+                    List<BakedQuad> outQuads = outerCore.getQuads(state, side, rand, extraData, renderType);
+                    quads.addAll(outQuads);
+                }
+                return quads;
+            }
         }
-        return quads;
+        return coreQuads;
     }
 
     @Override
     @Nonnull
-    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData extraData)
+    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData data)
     {
-        return new LeavesOrdinalData(pos);
+        return data.derive().with(LeavesOrdinalData.PROPERTY, new LeavesOrdinalData(pos)).build();
     }
 
     @Override

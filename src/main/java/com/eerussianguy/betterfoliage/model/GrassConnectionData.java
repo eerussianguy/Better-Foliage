@@ -1,7 +1,11 @@
 package com.eerussianguy.betterfoliage.model;
 
-public class GrassConnectionData implements IModelDataBlank
+import net.minecraftforge.client.model.data.ModelProperty;
+
+public class GrassConnectionData
 {
+    public static final ModelProperty<GrassConnectionData> PROPERTY = new ModelProperty<>();
+
     private final int meta;
     private final boolean up;
 

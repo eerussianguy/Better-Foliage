@@ -6,24 +6,17 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraftforge.client.model.IModelLoader;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
 import com.eerussianguy.betterfoliage.Helpers;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LeavesLoader implements IModelLoader<LeavesModel>
+public class LeavesLoader implements IGeometryLoader<LeavesModel>
 {
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager)
-    {
-        // do nothing
-    }
-
-    @Override
-    public LeavesModel read(JsonDeserializationContext deserializer, JsonObject json)
+    public LeavesModel read(JsonObject json, JsonDeserializationContext deserializer)
     {
         ResourceLocation leaves = Helpers.requireID(json, "leaves");
         ResourceLocation fluff = Helpers.requireID(json, "fluff");

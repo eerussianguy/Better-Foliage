@@ -20,9 +20,9 @@ public class SoulParticle extends TextureSheetParticle
     private double drift;
     private boolean children;
 
-    public SoulParticle(ClientLevel world, double x, double y, double z)
+    public SoulParticle(ClientLevel level, double x, double y, double z)
     {
-        super(world, x, y, z);
+        super(level, x, y, z);
         hasPhysics = false;
         setSize(0.02F, 0.02F);
         ageOffset = random.nextInt(15);
@@ -32,9 +32,9 @@ public class SoulParticle extends TextureSheetParticle
         children = true;
     }
 
-    public SoulParticle(ClientLevel world, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize)
+    public SoulParticle(ClientLevel level, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize)
     {
-        this(world, x, y, z);
+        this(level, x, y, z);
         this.children = children;
         this.drift = drift;
         this.ageOffset = ageOffset;
