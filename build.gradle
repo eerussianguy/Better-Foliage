@@ -134,7 +134,7 @@ curseforge {
 
     project {
         id = '470013'
-        changelog = "No changelogs :)"
+        changelog = "[Changelog ${version}](https://github.com/eerussianguy/Better-Foliage/releases/tag/v${project.version})"
         changelogType = "markdown"
 
         releaseType = versionType

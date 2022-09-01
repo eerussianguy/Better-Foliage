@@ -33,7 +33,24 @@ jobs:
         arguments: build
       env:
         VERSION: ${{ steps.version.outputs.result }}
-    - name: Publish
+    - name: Create Release
+      id: create_release
+      if: ${{ success() }}
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version.outputs.result }}
+        release_name: BetterFoliage v${{ steps.version.outputs.result }}
+        body: |
+          Version ${{ steps.version.outputs.result }}
+          
+          ### Changes
+          
+          - todo: document changes
+        draft: true
+        prerelease: ${{ steps.version_type.outputs.result != 'release' }}
+  - name: Publish
       id: publish
       if: ${{ steps.version_type.outputs.result != 'alpha' && success() }}
       uses: gradle/gradle-build-action@v2
