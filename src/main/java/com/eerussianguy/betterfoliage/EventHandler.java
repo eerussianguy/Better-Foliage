@@ -60,7 +60,7 @@ public class EventHandler
 
     private static void clientSetup(final FMLClientSetupEvent event)
     {
-        if (BFConfig.CLIENT.forceForgeLighting.get() && !OPTIFINE_LOADED.get())
+        if (BFConfig.CLIENT.forceForgeLighting.get() && !OPTIFINE_LOADED.get() && !ModList.get().isLoaded("oculus"))
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }

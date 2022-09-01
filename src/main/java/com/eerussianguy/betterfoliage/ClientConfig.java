@@ -37,7 +37,7 @@ public class ClientConfig
         snowballs = builder.apply("snowballs").comment("Enable Snowballs?").define("snowballs", true);
         leavesCacheSize = builder.apply("leavesCacheSize").comment("Determines the size of the leaves cache. Number of models cached per leaf block will be the number you input to the third power. Bigger cache = more RAM, but more variation and less z-fighting as a result").worldRestart().defineInRange("leavesCacheSize", 7, 5, 20);
         leavesVariationDistance = builder.apply("leavesVariationDistance").comment("Determines the max distance leaves block fluff can deviate from the actual block. 0.0 means no distance variation (all fluff is in the middle of the block)").worldRestart().defineInRange("leavesVariationDistance", 2.75f, 0f, 7f);
-        forceForgeLighting = builder.apply("forceForgeLighting").comment("Force Forge Lighting Pipeline? (should be true when not using Optifine)").define("forceForgeLighting", true);
+        forceForgeLighting = builder.apply("forceForgeLighting").comment("Force the Forge Lighting Pipeline? This is ignored if Optifine or Oculus are installed.").define("forceForgeLighting", true);
         extraGrassRarity = builder.apply("extraGrassRarity").comment("Inverse of the rarity of the extra grass. Increase the value to make it less common.").defineInRange("extraGrassRarity", 2, 1, Integer.MAX_VALUE);
 
         innerBuilder.pop();
