@@ -20,9 +20,11 @@ import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import com.eerussianguy.betterfoliage.compat.TFCIntegration;
 import com.eerussianguy.betterfoliage.model.GrassBakedModel;
 import com.eerussianguy.betterfoliage.model.GrassLoader;
 import com.eerussianguy.betterfoliage.model.LeavesBakedModel;
@@ -64,6 +66,11 @@ public class EventHandler
         }
 
         ItemBlockRenderTypes.setRenderLayer(Blocks.MYCELIUM, RenderType.cutout());
+
+        if (ModList.get().isLoaded("tfc"))
+        {
+            BetterFoliage.FOLIAGE = TFCIntegration.INSTANCE;
+        }
     }
 
     private static void onModelBake(final ModelBakeEvent event)

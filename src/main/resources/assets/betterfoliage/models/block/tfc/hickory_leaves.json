@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "tfc:block/wood/leaves/hickory",
+  "fluff": "tfc:block/wood/leaves/hickory_fluff"
+}

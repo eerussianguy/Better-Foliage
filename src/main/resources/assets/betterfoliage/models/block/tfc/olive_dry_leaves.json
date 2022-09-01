@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "tfc:block/fruit_tree/olive_dry_leaves",
+  "fluff": "betterfoliage:block/tfc/olive_dry_leaves_fluff"
+}

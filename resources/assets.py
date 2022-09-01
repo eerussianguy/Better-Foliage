@@ -1,12 +1,26 @@
 from mcresources import ResourceManager
-from mcresources import utils
 
 
 def generate(rm: ResourceManager):
     vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea')
+    tfc_woods = ('acacia', 'ash', 'aspen', 'birch', 'blackwood', 'chestnut', 'douglas_fir', 'hickory', 'kapok',
+                 'maple', 'oak', 'pine', 'rosewood', 'sequoia', 'spruce', 'sycamore', 'white_cedar', 'willow')  # palm omitted
+    tfc_fruits = ('cherry', 'green_apple', 'lemon', 'olive', 'orange', 'peach', 'plum', 'red_apple')
 
     for wood in vanilla_woods:
         leaves(rm, '%s_leaves' % wood, '%s_fluff' % wood)
+    for wood in tfc_woods:
+        rm.blockstate('tfc:wood/leaves/%s' % wood, model='betterfoliage:block/tfc/%s_leaves' % wood)
+        leaves_model_only(rm, 'betterfoliage:tfc/%s_leaves' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
+    for fruit in tfc_fruits:
+        rm.blockstate('tfc:plant/%s_leaves' % fruit, variants={
+            'lifecycle=flowering': {'model': 'betterfoliage:block/tfc/%s_flowering_leaves' % fruit},
+            'lifecycle=fruiting': {'model': 'betterfoliage:block/tfc/%s_fruiting_leaves' % fruit},
+            'lifecycle=dormant': {'model': 'betterfoliage:block/tfc/%s_dry_leaves' % fruit},
+            'lifecycle=healthy': {'model': 'betterfoliage:block/tfc/%s_leaves' % fruit}
+        })
+        for life in ('', '_fruiting', '_flowering', '_dry'):
+            leaves_model_only(rm, 'betterfoliage:tfc/%s%s_leaves' % (fruit, life), 'tfc:block/fruit_tree/%s%s_leaves' % (fruit, life), 'betterfoliage:block/tfc/%s%s_leaves_fluff' % (fruit, life))
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -38,7 +52,7 @@ def generate(rm: ResourceManager):
 
     rm.blockstate('minecraft:podzol', variants={
         'snowy=false': {'model': 'betterfoliage:block/podzol'},
-        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block'}
+        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block_no_grass'}
     })
 
     rm.custom_block_model('betterfoliage:grass_block', 'betterfoliage:grass', {
@@ -55,6 +69,13 @@ def generate(rm: ResourceManager):
         'overlay': 'minecraft:block/grass_block_snow',
         'tint': False,
         'grass': 'betterfoliage:block/better_grass_snowed'
+    })
+
+    rm.custom_block_model('betterfoliage:snowy_grass_block_no_grass', 'betterfoliage:grass', {
+        'dirt': 'minecraft:block/dirt',
+        'top': 'minecraft:block/snow',
+        'overlay': 'minecraft:block/grass_block_snow',
+        'tint': False,
     })
 
     rm.custom_block_model('betterfoliage:mycelium', 'betterfoliage:grass', {

@@ -115,32 +115,24 @@ public class Helpers
 
     public static void addParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites)
     {
-        Minecraft mc = Minecraft.getInstance();
+        final Minecraft mc = Minecraft.getInstance();
 
-        SpritePicker picker = new SpritePicker();
+        final SpritePicker picker = new SpritePicker();
         picker.rebind(sprites);
 
         particle.pickSprite(picker);
         mc.particleEngine.add(particle);
     }
 
-    static void addTintedParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientLevel level, BlockPos pos)
+    public static void finishParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, int color)
     {
-        Minecraft mc = Minecraft.getInstance();
-
-        SpritePicker picker = new SpritePicker();
+        final Minecraft mc = Minecraft.getInstance();
+        final SpritePicker picker = new SpritePicker();
         picker.rebind(sprites);
 
-        int color = mc.getBlockColors().getColor(state, level, pos); // catches leaves that override default (like birch)
-        if (color == FoliageColor.getDefaultColor())
-        {
-            color = level.getBiome(pos).value().getFoliageColor(); // catches stuff like swamp that uses biome always
-        }
-
-        float r = ((color >> 16) & 0xFF) / 255F;
-        float g = ((color >> 8) & 0xFF) / 255F;
-        float b = (color & 0xFF) / 255F;
-        //float a = ((color >> 24) & 0xFF) / 255F;
+        final float r = ((color >> 16) & 0xFF) / 255F;
+        final float g = ((color >> 8) & 0xFF) / 255F;
+        final float b = (color & 0xFF) / 255F;
 
         particle.pickSprite(picker);
         particle.setColor(r, g, b);

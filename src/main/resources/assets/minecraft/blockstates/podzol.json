@@ -5,7 +5,7 @@
       "model": "betterfoliage:block/podzol"
     },
     "snowy=true": {
-      "model": "betterfoliage:block/snowy_grass_block"
+      "model": "betterfoliage:block/snowy_grass_block_no_grass"
     }
   }
 }

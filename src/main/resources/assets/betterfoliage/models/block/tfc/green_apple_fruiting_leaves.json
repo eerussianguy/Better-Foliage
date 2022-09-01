@@ -1,0 +1,6 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "tfc:block/fruit_tree/green_apple_fruiting_leaves",
+  "fluff": "betterfoliage:block/tfc/green_apple_fruiting_leaves_fluff"
+}
