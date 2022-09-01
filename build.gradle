@@ -140,7 +140,9 @@ curseforge {
         releaseType = versionType
         addGameVersion "1.18.2"
 
-        mainArtifact jar
+        mainArtifact(jar) {
+            displayName = System.getenv('VERSION').toString().replace('v', '')
+        }
 
         relations {
             optionalDependency 'terrafirmacraft'
