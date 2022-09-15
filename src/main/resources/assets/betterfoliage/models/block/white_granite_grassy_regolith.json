@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:grass",
+  "dirt": "unearthed:block/white_granite_regolith",
+  "top": "minecraft:block/grass_top",
+  "overlay": "minecraft:block/grass_side",
+  "tint": false
+}
