@@ -6,7 +6,7 @@ def generate(rm: ResourceManager):
     vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove')
 
     for wood in vanilla_woods:
-        leaves(rm, '%s_leaves' % wood, '%s_fluff' % wood)
+        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood)
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -84,22 +84,14 @@ def generate(rm: ResourceManager):
     # enhanced farming
     for fruit in ('apple', 'avocado', 'banana', 'cherry', 'lemon', 'mango', 'olive', 'orange', 'pear'):
         base = 'oak' if fruit != 'banana' else 'jungle'
-        leaves_model_only(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
-        leaves_model_only(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
+        leaves_model(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
+        leaves_model(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
 
 
-def leaves_model_only(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
+def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
     rm.custom_block_model(model, 'betterfoliage:leaves', {
         'leaves': block,
         'fluff': fluff,
         'overlay': overlay
     })
 
-
-def leaves(rm: ResourceManager, name: str, fluff: str, overlay: str = None):
-    rm.blockstate('minecraft:%s' % name, model='betterfoliage:block/%s' % name)
-    rm.custom_block_model('betterfoliage:%s' % name, 'betterfoliage:leaves', {
-        'leaves': 'minecraft:block/%s' % name,
-        'fluff': 'betterfoliage:block/%s' % fluff,
-        'overlay': overlay
-    })
