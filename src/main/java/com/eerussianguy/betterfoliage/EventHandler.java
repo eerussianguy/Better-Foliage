@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -53,7 +54,7 @@ public class EventHandler
 
     private static void clientSetup(final FMLClientSetupEvent event)
     {
-        if (BFConfig.CLIENT.forceForgeLighting.get() && !OPTIFINE_LOADED.get())
+        if (BFConfig.CLIENT.forceForgeLighting.get() && !OPTIFINE_LOADED.get() && !ModList.get().isLoaded("oculus"))
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }
