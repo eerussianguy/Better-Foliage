@@ -1,12 +1,8 @@
 package com.eerussianguy.betterfoliage.model;
 
 import java.util.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,9 +20,8 @@ import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
 import com.mojang.math.Vector3f;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public class LeavesBakedModel extends BFBakedModel
 {
     public static List<LeavesBakedModel> INSTANCES = new ArrayList<>();
@@ -39,14 +34,14 @@ public class LeavesBakedModel extends BFBakedModel
     private final boolean tintOverlay;
     private final boolean tintLeaves;
 
-    private TextureAtlasSprite leavesTex;
-    private TextureAtlasSprite fluffTex;
+    @Nullable private TextureAtlasSprite leavesTex;
+    @Nullable private TextureAtlasSprite fluffTex;
 
     private final BlockModel blockModel;
     private final BakedModel[] crosses = new BakedModel[(int) Math.pow(BFConfig.CLIENT.leavesCacheSize.get(), 3)];
 
-    private BakedModel core;
-    private BakedModel outerCore;
+    @Nullable private BakedModel core;
+    @Nullable private BakedModel outerCore;
 
     public LeavesBakedModel(ResourceLocation modelLocation, ResourceLocation leaves, ResourceLocation fluff, ResourceLocation overlay, boolean tintLeaves, boolean tintOverlay)
     {
@@ -72,6 +67,7 @@ public class LeavesBakedModel extends BFBakedModel
             TextureAtlasSprite overlayTex = Helpers.getTexture(overlay);
             outerCore = buildBlock(overlayTex, tintOverlay);
         }
+        assert leavesTex != null;
         core = buildBlock(leavesTex, tintLeaves);
         buildCrosses();
     }
@@ -144,9 +140,10 @@ public class LeavesBakedModel extends BFBakedModel
     }
 
     @Override
-    @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType)
+    @NotNull
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType)
     {
+        assert core != null;
         List<BakedQuad> coreQuads = core.getQuads(state, side, rand, extraData, renderType);
         if (state != null)
         {
@@ -158,6 +155,7 @@ public class LeavesBakedModel extends BFBakedModel
                 quads.addAll(crossQuads);
                 if (isOverlay)
                 {
+                    assert outerCore != null;
                     List<BakedQuad> outQuads = outerCore.getQuads(state, side, rand, extraData, renderType);
                     quads.addAll(outQuads);
                 }
@@ -168,8 +166,8 @@ public class LeavesBakedModel extends BFBakedModel
     }
 
     @Override
-    @Nonnull
-    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData data)
+    @NotNull
+    public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData data)
     {
         return data.derive().with(LeavesOrdinalData.PROPERTY, new LeavesOrdinalData(pos)).build();
     }
@@ -177,7 +175,7 @@ public class LeavesBakedModel extends BFBakedModel
     @Override
     public TextureAtlasSprite getParticleIcon()
     {
-        return leavesTex;
+        return Objects.requireNonNull(leavesTex);
     }
 
 }

@@ -1,7 +1,5 @@
 package com.eerussianguy.betterfoliage.model;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 
@@ -32,7 +30,6 @@ public abstract class BFBakedModel implements IDynamicBakedModel
     }
 
     @Override
-    @Nonnull
     public ItemOverrides getOverrides()
     {
         return ItemOverrides.EMPTY;

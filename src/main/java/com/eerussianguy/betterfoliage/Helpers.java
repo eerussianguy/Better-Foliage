@@ -41,9 +41,19 @@ public class Helpers
 
     public static final BlockFaceUV UV_DEFAULT = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);;
 
+    public static BlockElementFace makeTintedFace(BlockFaceUV uv, boolean ao)
+    {
+        return new BlockElementFace(null, 0, "", uv, 0, ao);
+    }
+
     public static BlockElementFace makeTintedFace(BlockFaceUV uv)
     {
         return new BlockElementFace(null, 0, "", uv);
+    }
+
+    public static BlockElementFace makeFace(BlockFaceUV uv, boolean ao)
+    {
+        return new BlockElementFace(null, -1, "", uv, 0, ao);
     }
 
     public static BlockElementFace makeFace(BlockFaceUV uv)

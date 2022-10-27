@@ -1,12 +1,8 @@
 package com.eerussianguy.betterfoliage.model;
 
 import java.util.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
@@ -29,9 +25,8 @@ import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
 import com.mojang.math.Vector3f;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class GrassBakedModel extends BFBakedModel
 {
     public static List<GrassBakedModel> INSTANCES = new ArrayList<>();
@@ -46,9 +41,9 @@ public class GrassBakedModel extends BFBakedModel
     private final ResourceLocation grass;
     private final boolean tint;
 
-    private TextureAtlasSprite dirtTex;
-    private TextureAtlasSprite topTex;
-    private TextureAtlasSprite overlayTex;
+    @Nullable private TextureAtlasSprite dirtTex;
+    @Nullable private TextureAtlasSprite topTex;
+    @Nullable private TextureAtlasSprite overlayTex;
 
     private final BakedModel[] models = new BakedModel[16];
 
@@ -98,6 +93,7 @@ public class GrassBakedModel extends BFBakedModel
                 mapFacesIn.put(d, (d != Direction.DOWN && tint) ? Helpers.makeTintedFace(faceUV) : Helpers.makeFace(faceUV));
             }
             BlockElement part = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
+            assert topTex != null;
             SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(topTex);
 
             final int fMeta = meta;
@@ -109,6 +105,7 @@ public class GrassBakedModel extends BFBakedModel
 
     private TextureAtlasSprite resolveTexture(Direction d, boolean[] booleans)
     {
+        assert dirtTex != null && topTex != null && overlayTex != null;
         return switch (d)
             {
                 case UP -> topTex;
@@ -131,8 +128,8 @@ public class GrassBakedModel extends BFBakedModel
     }
 
     @Override
-    @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType)
+    @NotNull
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType)
     {
         if (extraData.has(GrassConnectionData.PROPERTY))
         {
@@ -153,8 +150,8 @@ public class GrassBakedModel extends BFBakedModel
     }
 
     @Override
-    @Nonnull
-    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData extraData)
+    @NotNull
+    public ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData extraData)
     {
         final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         final BlockPos down = pos.below();
@@ -170,11 +167,11 @@ public class GrassBakedModel extends BFBakedModel
     @Override
     public TextureAtlasSprite getParticleIcon()
     {
-        return dirtTex;
+        return Objects.requireNonNull(dirtTex);
     }
 
     @Override
-    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data)
     {
         return RENDER_TYPES;
     }

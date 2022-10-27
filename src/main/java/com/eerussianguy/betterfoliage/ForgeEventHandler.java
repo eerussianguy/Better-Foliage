@@ -1,7 +1,5 @@
 package com.eerussianguy.betterfoliage;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
