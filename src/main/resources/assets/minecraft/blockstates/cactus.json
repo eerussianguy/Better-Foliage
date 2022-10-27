@@ -3,29 +3,27 @@
   "variants": {
     "": [
       {
-        "model": "minecraft:block/cactus",
-        "weight": 3,
-        "y": 0
+        "model": "betterfoliage:block/cactus",
+        "weight": 3
       },
       {
-        "model": "minecraft:block/cactus",
+        "model": "betterfoliage:block/cactus",
         "weight": 3,
         "y": 90
       },
       {
-        "model": "minecraft:block/cactus",
+        "model": "betterfoliage:block/cactus",
         "weight": 3,
         "y": 180
       },
       {
-        "model": "minecraft:block/cactus",
+        "model": "betterfoliage:block/cactus",
         "weight": 3,
         "y": 270
       },
       {
         "model": "betterfoliage:block/cactus1",
-        "weight": 2,
-        "y": 0
+        "weight": 2
       },
       {
         "model": "betterfoliage:block/cactus1",
@@ -44,8 +42,7 @@
       },
       {
         "model": "betterfoliage:block/cactus2",
-        "weight": 4,
-        "y": 0
+        "weight": 4
       },
       {
         "model": "betterfoliage:block/cactus2",
@@ -63,8 +60,7 @@
         "y": 270
       },
       {
-        "model": "betterfoliage:block/cactus3",
-        "y": 0
+        "model": "betterfoliage:block/cactus3"
       },
       {
         "model": "betterfoliage:block/cactus3",
@@ -79,8 +75,7 @@
         "y": 270
       },
       {
-        "model": "betterfoliage:block/cactus4",
-        "y": 0
+        "model": "betterfoliage:block/cactus4"
       },
       {
         "model": "betterfoliage:block/cactus4",
@@ -95,8 +90,7 @@
         "y": 270
       },
       {
-        "model": "betterfoliage:block/cactus5",
-        "y": 0
+        "model": "betterfoliage:block/cactus5"
       },
       {
         "model": "betterfoliage:block/cactus5",

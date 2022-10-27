@@ -17,13 +17,11 @@ def generate(rm: ResourceManager):
             })
             pad += 1
 
-    cactus_variants = [{'model': 'minecraft:block/cactus', 'weight': 3, 'y': i} for i in (0, 90, 180, 270)]
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus1', 'weight': 2, 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus2', 'weight': 4, 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus3', 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus4', 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus5', 'y': i} for i in (0, 90, 180, 270)])
-
+    rm.block_model('cactus', parent='minecraft:block/cactus', no_textures=True)
+    cactus_variants = [
+        {'model': 'betterfoliage:block/cactus%s' % i, 'weight': w, 'y': r}
+        for i, w in (('', 3), ('1', 2), ('2', 4), ('3', None), ('4', None), ('5', None))
+        for r in (None, 90, 180, 270)]
     rm.blockstate('minecraft:cactus', variants={"": cactus_variants}, use_default_model=False)
 
     rm.blockstate('minecraft:grass_block', variants={
