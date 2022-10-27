@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:grass",
+  "dirt": "minecraft:block/dirt",
+  "top": "minecraft:block/snow",
+  "overlay": "minecraft:block/grass_block_snow",
+  "tint": false
+}

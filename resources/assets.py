@@ -38,7 +38,7 @@ def generate(rm: ResourceManager):
 
     rm.blockstate('minecraft:podzol', variants={
         'snowy=false': {'model': 'betterfoliage:block/podzol'},
-        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block'}
+        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block_no_grass'}
     })
 
     rm.custom_block_model('betterfoliage:grass_block', 'betterfoliage:grass', {
@@ -55,6 +55,13 @@ def generate(rm: ResourceManager):
         'overlay': 'minecraft:block/grass_block_snow',
         'tint': False,
         'grass': 'betterfoliage:block/better_grass_snowed'
+    })
+
+    rm.custom_block_model('betterfoliage:snowy_grass_block_no_grass', 'betterfoliage:grass', {
+        'dirt': 'minecraft:block/dirt',
+        'top': 'minecraft:block/snow',
+        'overlay': 'minecraft:block/grass_block_snow',
+        'tint': False,
     })
 
     rm.custom_block_model('betterfoliage:mycelium', 'betterfoliage:grass', {
