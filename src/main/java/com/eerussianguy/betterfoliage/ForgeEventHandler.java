@@ -58,7 +58,7 @@ public class ForgeEventHandler
                     BetterFoliage.FOLIAGE.create(particle, state, level, searchPos);
                 }
             }
-            else if (BFConfig.CLIENT.souls.get() && state.is(BlockTags.SOUL_FIRE_BASE_BLOCKS) && level.isEmptyBlock(searchPos.above()))
+            else if (BFConfig.CLIENT.souls.get() && (state.is(Blocks.SOUL_SOIL) || state.is(Blocks.SOUL_SAND)) && level.isEmptyBlock(searchPos.above()))
             {
                 SoulParticle particle = new SoulParticle(level, searchPos.getX() + 0.5D, searchPos.getY() + 1.01D, searchPos.getZ() + 0.5D);
                 Helpers.addParticle(particle, EventHandler.MAP.get(ParticleLocation.SOUL));

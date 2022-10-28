@@ -8,19 +8,14 @@ def generate(rm: ResourceManager):
     tfc_fruits = ('cherry', 'green_apple', 'lemon', 'olive', 'orange', 'peach', 'plum', 'red_apple')
 
     for wood in vanilla_woods:
-        leaves(rm, '%s_leaves' % wood, '%s_fluff' % wood)
+        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood)
     for wood in tfc_woods:
-        rm.blockstate('tfc:wood/leaves/%s' % wood, model='betterfoliage:block/tfc/%s_leaves' % wood)
-        leaves_model_only(rm, 'betterfoliage:tfc/%s_leaves' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
+        leaves_model(rm, 'tfc:wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
+        # compat for vexxels pack
+        leaves_model(rm, 'tfc:wood/leaves/mirrored/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
     for fruit in tfc_fruits:
-        rm.blockstate('tfc:plant/%s_leaves' % fruit, variants={
-            'lifecycle=flowering': {'model': 'betterfoliage:block/tfc/%s_flowering_leaves' % fruit},
-            'lifecycle=fruiting': {'model': 'betterfoliage:block/tfc/%s_fruiting_leaves' % fruit},
-            'lifecycle=dormant': {'model': 'betterfoliage:block/tfc/%s_dry_leaves' % fruit},
-            'lifecycle=healthy': {'model': 'betterfoliage:block/tfc/%s_leaves' % fruit}
-        })
         for life in ('', '_fruiting', '_flowering', '_dry'):
-            leaves_model_only(rm, 'betterfoliage:tfc/%s%s_leaves' % (fruit, life), 'tfc:block/fruit_tree/%s%s_leaves' % (fruit, life), 'betterfoliage:block/tfc/%s%s_leaves_fluff' % (fruit, life))
+            leaves_model(rm, 'tfc:plant/%s%s_leaves' % (fruit, life), 'tfc:block/fruit_tree/%s%s_leaves' % (fruit, life), 'betterfoliage:block/tfc/%s%s_leaves_fluff' % (fruit, life))
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -31,13 +26,11 @@ def generate(rm: ResourceManager):
             })
             pad += 1
 
-    cactus_variants = [{'model': 'minecraft:block/cactus', 'weight': 3, 'y': i} for i in (0, 90, 180, 270)]
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus1', 'weight': 2, 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus2', 'weight': 4, 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus3', 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus4', 'y': i} for i in (0, 90, 180, 270)])
-    cactus_variants.extend([{'model': 'betterfoliage:block/cactus5', 'y': i} for i in (0, 90, 180, 270)])
-
+    rm.block_model('cactus', parent='minecraft:block/cactus', no_textures=True)
+    cactus_variants = [
+        {'model': 'betterfoliage:block/cactus%s' % i, 'weight': w, 'y': r}
+        for i, w in (('', 3), ('1', 2), ('2', 4), ('3', None), ('4', None), ('5', None))
+        for r in (None, 90, 180, 270)]
     rm.blockstate('minecraft:cactus', variants={"": cactus_variants}, use_default_model=False)
 
     rm.blockstate('minecraft:grass_block', variants={
@@ -100,22 +93,13 @@ def generate(rm: ResourceManager):
     # enhanced farming
     for fruit in ('apple', 'avocado', 'banana', 'cherry', 'lemon', 'mango', 'olive', 'orange', 'pear'):
         base = 'oak' if fruit != 'banana' else 'jungle'
-        leaves_model_only(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
-        leaves_model_only(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
+        leaves_model(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
+        leaves_model(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
 
 
-def leaves_model_only(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
+def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
     rm.custom_block_model(model, 'betterfoliage:leaves', {
         'leaves': block,
         'fluff': fluff,
-        'overlay': overlay
-    })
-
-
-def leaves(rm: ResourceManager, name: str, fluff: str, overlay: str = None):
-    rm.blockstate('minecraft:%s' % name, model='betterfoliage:block/%s' % name)
-    rm.custom_block_model('betterfoliage:%s' % name, 'betterfoliage:leaves', {
-        'leaves': 'minecraft:block/%s' % name,
-        'fluff': 'betterfoliage:block/%s' % fluff,
         'overlay': overlay
     })

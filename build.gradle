@@ -68,7 +68,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.73'
 
-    compileOnly fg.deobf("curse.maven:tfc-302973:3960484")
+    compileOnly fg.deobf("curse.maven:tfc-302973:4044049")
+    //runtimeOnly fg.deobf("curse.maven:tfc-302973:4044049")
     //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-70")
     //runtimeOnly fg.deobf('bop:BiomesOPlenty-1.18.2:16.0.0.109-universal')
     //runtimeOnly fg.deobf('tb:TerraBlender-forge-1.18.2:1.1.0.102')

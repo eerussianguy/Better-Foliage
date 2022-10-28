@@ -21,6 +21,7 @@ import net.minecraftforge.client.model.data.IModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 @MethodsReturnNonnullByDefault
@@ -174,4 +175,10 @@ public class LeavesBakedModel extends BFBakedModel
         return leavesTex;
     }
 
+    @Override
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack poseStack)
+    {
+        Helpers.handlePerspective(cameraTransformType, poseStack);
+        return this;
+    }
 }
