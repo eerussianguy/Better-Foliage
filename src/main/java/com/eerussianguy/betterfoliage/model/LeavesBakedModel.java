@@ -18,6 +18,7 @@ import net.minecraftforge.client.model.data.ModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -125,7 +126,7 @@ public class LeavesBakedModel extends BFBakedModel
         Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
         for (Direction d : Helpers.DIRECTIONS)
         {
-            mapFacesIn.put(d, tint ? Helpers.makeTintedFace(Helpers.UV_DEFAULT) : Helpers.makeFace(Helpers.UV_DEFAULT));
+            mapFacesIn.put(d, tint ? Helpers.makeTintedFace(Helpers.UV_DEFAULT, true) : Helpers.makeFace(Helpers.UV_DEFAULT, true));
         }
         BlockElement part = new BlockElement(new Vector3f(0f, 0f, 0f), new Vector3f(16f, 16f, 16f), mapFacesIn, null, true);
         SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(tex);
@@ -178,4 +179,10 @@ public class LeavesBakedModel extends BFBakedModel
         return Objects.requireNonNull(leavesTex);
     }
 
+    @Override
+    public BakedModel applyTransform(ItemTransforms.TransformType transformType, PoseStack poseStack, boolean applyLeftHandTransform)
+    {
+        Helpers.applyTransform(transformType, poseStack, applyLeftHandTransform);
+        return this;
+    }
 }

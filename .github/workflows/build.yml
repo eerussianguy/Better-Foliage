@@ -49,10 +49,9 @@ jobs:
             
             - todo: document changes
           draft: true
-          prerelease: ${{ steps.version_type.outputs.result != 'release' }}
       - name: Publish
         id: publish
-        if: ${{ steps.version_type.outputs.result != 'alpha' && success() }}
+        if: ${{ success() }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: curseforge

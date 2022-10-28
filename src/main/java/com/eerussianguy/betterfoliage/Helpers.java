@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
@@ -16,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,12 +25,14 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.eerussianguy.betterfoliage.particle.SpritePicker;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 
 public class Helpers
 {
     public static final Direction[] DIRECTIONS = Direction.values();
+    public static final ModelResourceLocation BACKING_DIRT_MODEL = new ModelResourceLocation("minecraft", "dirt", "inventory");
 
     public static ResourceLocation identifier(String name)
     {
@@ -75,7 +77,7 @@ public class Helpers
     public static Collection<Material> makeMaterials(ResourceLocation... textures)
     {
         //noinspection deprecation
-        return Arrays.stream(textures).map(texture -> new Material(TextureAtlas.LOCATION_BLOCKS, texture)).collect(Collectors.toList());
+        return Arrays.stream(textures).map(texture -> new Material(TextureAtlas.LOCATION_BLOCKS, texture)).toList();
     }
 
     public static BakedQuad makeBakedQuad(BlockElement BlockElement, BlockElementFace partFace, TextureAtlasSprite atlasSprite, Direction dir, BlockModelRotation modelRotation, ResourceLocation modelResLoc)
@@ -155,5 +157,10 @@ public class Helpers
         particle.pickSprite(picker);
         particle.setColor(r, g, b);
         mc.particleEngine.add(particle);
+    }
+
+    public static void applyTransform(ItemTransforms.TransformType cameraTransformType, PoseStack poseStack, boolean lefty)
+    {
+        Minecraft.getInstance().getModelManager().getModel(BACKING_DIRT_MODEL).applyTransform(cameraTransformType, poseStack, lefty);
     }
 }
