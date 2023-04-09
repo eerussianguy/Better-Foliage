@@ -3,9 +3,9 @@ name: Test 1.19.x
 on:
   push:
     branches:
-      - 1.19.x
+      - 1.19.3
   pull_request:
-    branches: [ 1.19.x ]
+    branches: [ 1.19.3 ]
 
 jobs:
   main:
