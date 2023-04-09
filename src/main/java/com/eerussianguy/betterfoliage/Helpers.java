@@ -21,6 +21,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -167,7 +168,7 @@ public class Helpers
         mc.particleEngine.add(particle);
     }
 
-    public static void applyTransform(ItemTransforms.TransformType cameraTransformType, PoseStack poseStack, boolean lefty)
+    public static void applyTransform(ItemDisplayContext cameraTransformType, PoseStack poseStack, boolean lefty)
     {
         Minecraft.getInstance().getModelManager().getModel(BACKING_DIRT_MODEL).applyTransform(cameraTransformType, poseStack, lefty);
     }

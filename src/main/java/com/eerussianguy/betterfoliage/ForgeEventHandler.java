@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -52,7 +53,8 @@ public class ForgeEventHandler
 
         ClientLevel level = (ClientLevel) entity.level;
         if (level.getGameTime() % 2 != 0) return;
-        Vec3 pos = entity.position();
+        final Vec3 ePos = entity.position();
+        final Vec3i pos = new Vec3i((int) ePos.x, (int) ePos.y, (int) ePos.z);
 
         RandomSource rand = level.random;
         final int spawnDistance = BFConfig.CLIENT.particleDistance.get();
@@ -65,7 +67,7 @@ public class ForgeEventHandler
         {
             for (int i = 0; i < BFConfig.CLIENT.particleAttempts.get(); i++)
             {
-                BlockPos searchPos = new BlockPos(pos.add(rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance), rand.nextInt(spawnDistance) - 1, rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance)));
+                BlockPos searchPos = new BlockPos(pos.offset(rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance), rand.nextInt(spawnDistance) - 1, rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance)));
                 BlockState state = level.getBlockState(searchPos);
                 if (state.is(BlockTags.LEAVES) && level.isEmptyBlock(searchPos.below()))
                 {

@@ -20,7 +20,7 @@ Most changes are configurable via resource pack.
 [[dependencies.betterfoliage]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.4,1.20)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.betterfoliage]]
