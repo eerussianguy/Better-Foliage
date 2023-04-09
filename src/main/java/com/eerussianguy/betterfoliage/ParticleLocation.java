@@ -1,7 +1,8 @@
 package com.eerussianguy.betterfoliage;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import net.minecraft.resources.ResourceLocation;
 
 public enum ParticleLocation
 {
@@ -12,25 +13,15 @@ public enum ParticleLocation
     SOUL("rising_soul_0", "rising_soul_1"),
     SOUL_TRAIL("soul_track");
 
-    private final String[] locations;
+    private final List<ResourceLocation> resources;
 
     ParticleLocation(String... locations)
     {
-        this.locations = locations;
+        this.resources = Arrays.stream(locations).map(Helpers::identifier).toList();
     }
 
-    public String[] getLocations()
+    public List<ResourceLocation> getResourceLocations()
     {
-        return locations;
-    }
-
-    public static List<String[]> getAllLocations()
-    {
-        List<String[]> strings = new ArrayList<>();
-        for (ParticleLocation location : ParticleLocation.values())
-        {
-            strings.add(location.getLocations());
-        }
-        return strings;
+        return resources;
     }
 }

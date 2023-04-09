@@ -23,9 +23,9 @@ import net.minecraftforge.client.model.data.ModelData;
 
 import com.eerussianguy.betterfoliage.BFConfig;
 import com.eerussianguy.betterfoliage.Helpers;
-import com.mojang.math.Vector3f;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class GrassBakedModel extends BFBakedModel
 {

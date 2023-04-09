@@ -1,15 +1,8 @@
 package com.eerussianguy.betterfoliage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeConfig;
@@ -25,8 +18,6 @@ import com.eerussianguy.betterfoliage.model.LeavesLoader;
 
 public class EventHandler
 {
-    public static final Map<ParticleLocation, List<TextureAtlasSprite>> MAP = new HashMap<>();
-
     private static final Supplier<Boolean> OPTIFINE_LOADED = Suppliers.memoize(() ->
     {
         try
@@ -48,7 +39,6 @@ public class EventHandler
         bus.addListener(EventHandler::onModelBake);
         bus.addListener(EventHandler::onModelRegister);
         bus.addListener(EventHandler::onLoaderRegister);
-        bus.addListener(EventHandler::onTextureStitch);
         bus.addListener(EventHandler::afterTextureStitch);
     }
 
@@ -66,6 +56,11 @@ public class EventHandler
         GrassBakedModel.INSTANCES.forEach(GrassBakedModel::init);
     }
 
+    private static void afterTextureStitch(final TextureStitchEvent.Post event)
+    {
+        ForgeEventHandler.clearCache();
+    }
+
     private static void onLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
     {
         event.register("leaves", new LeavesLoader());
@@ -77,46 +72,5 @@ public class EventHandler
         event.register(Helpers.identifier("block/better_grass"));
         event.register(Helpers.identifier("block/better_grass_snowed"));
         event.register(Helpers.identifier("block/better_mycelium"));
-    }
-
-    @SuppressWarnings("deprecation")
-    private static void onTextureStitch(final TextureStitchEvent.Pre event)
-    {
-        final TextureAtlas atlas = event.getAtlas();
-        final ResourceLocation location = atlas.location();
-        if (location.equals(TextureAtlas.LOCATION_PARTICLES))
-        {
-            for (String[] array : ParticleLocation.getAllLocations())
-            {
-                for (String s : array)
-                {
-                    event.addSprite(Helpers.identifier("particle/" + s));
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private static void afterTextureStitch(final TextureStitchEvent.Post event)
-    {
-        final TextureAtlas atlas = event.getAtlas();
-        ResourceLocation res = atlas.location();
-        if (res.equals(TextureAtlas.LOCATION_PARTICLES))
-        {
-            for (ParticleLocation location : ParticleLocation.values())
-            {
-                MAP.put(location, getList(atlas, location.getLocations()));
-            }
-        }
-    }
-
-    private static List<TextureAtlasSprite> getList(TextureAtlas atlas, String... locations)
-    {
-        List<TextureAtlasSprite> list = new ArrayList<>();
-        for (String s : locations)
-        {
-            list.add(atlas.getSprite(Helpers.identifier("particle/" + s)));
-        }
-        return list;
     }
 }

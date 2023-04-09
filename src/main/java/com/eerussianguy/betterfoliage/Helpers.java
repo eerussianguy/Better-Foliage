@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.eerussianguy.betterfoliage.particle.SpritePicker;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraftforge.client.model.ForgeFaceData;
 
 import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 
@@ -41,11 +42,18 @@ public class Helpers
 
     public static final ResourceLocation EMPTY = identifier("empty");
 
-    public static final BlockFaceUV UV_DEFAULT = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);;
+    public static final BlockFaceUV UV_DEFAULT = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
+
+    public static ForgeFaceData forgeFace(boolean ao)
+    {
+        return ao ?
+            new ForgeFaceData(0xFFFFFFFF, 0, 0, true)
+            : new ForgeFaceData(0xFFFFFFFF, 0, 0, false);
+    }
 
     public static BlockElementFace makeTintedFace(BlockFaceUV uv, boolean ao)
     {
-        return new BlockElementFace(null, 0, "", uv, 0, ao);
+        return new BlockElementFace(null, 0, "", uv, forgeFace(ao));
     }
 
     public static BlockElementFace makeTintedFace(BlockFaceUV uv)
@@ -55,7 +63,7 @@ public class Helpers
 
     public static BlockElementFace makeFace(BlockFaceUV uv, boolean ao)
     {
-        return new BlockElementFace(null, -1, "", uv, 0, ao);
+        return new BlockElementFace(null, -1, "", uv, forgeFace(ao));
     }
 
     public static BlockElementFace makeFace(BlockFaceUV uv)
@@ -127,13 +135,13 @@ public class Helpers
 
     public static void addParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites)
     {
-        Minecraft mc = Minecraft.getInstance();
+        if (sprites == null) return;
 
         SpritePicker picker = new SpritePicker();
         picker.rebind(sprites);
 
         particle.pickSprite(picker);
-        mc.particleEngine.add(particle);
+        Minecraft.getInstance().particleEngine.add(particle);
     }
 
     static void addTintedParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientLevel level, BlockPos pos)

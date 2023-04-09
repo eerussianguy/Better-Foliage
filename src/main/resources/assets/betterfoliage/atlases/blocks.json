@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "sources": [
+    {
+      "type": "directory",
+      "source": "block",
+      "prefix": "block/"
+    }
+  ]
+}

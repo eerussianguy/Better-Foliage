@@ -27,9 +27,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println("Java: ${System.getProperty("java.version")} JVM: ${System.getProperty("java.vm.version")} (${System.getProperty("java.vendor")}) Arch: ${System.getProperty("os.arch")}")
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    mappings channel: 'official', version: '1.19.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -67,7 +65,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.47'
+    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
 
     //runtimeOnly fg.deobf('bop:BiomesOPlenty-1.18.2:16.0.0.109-universal')
     //runtimeOnly fg.deobf('tb:TerraBlender-forge-1.18.2:1.1.0.102')
@@ -106,7 +104,7 @@ curseforge {
         changelogType = "markdown"
 
         releaseType = versionType
-        addGameVersion "1.19.2"
+        addGameVersion "1.19.3"
 
         mainArtifact(jar) {
             displayName = System.getenv('VERSION').toString().replace('v', '')

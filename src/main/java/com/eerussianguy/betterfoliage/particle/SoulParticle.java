@@ -1,5 +1,6 @@
 package com.eerussianguy.betterfoliage.particle;
 
+import com.eerussianguy.betterfoliage.ForgeEventHandler;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -65,7 +66,7 @@ public class SoulParticle extends TextureSheetParticle
         if (children && (age == 5 || age == 10 || age == 15))
         {
             SoulParticle particle = new SoulParticle(level, x, y - (0.2D * age / 5), z, false, drift, ageOffset, yd, age, quadSize);
-            Helpers.addParticle(particle, EventHandler.MAP.get(ParticleLocation.SOUL_TRAIL));
+            Helpers.addParticle(particle, ForgeEventHandler.getTextures(ParticleLocation.SOUL_TRAIL, null));
         }
     }
 

@@ -87,6 +87,21 @@ def generate(rm: ResourceManager):
         leaves_model(rm, 'enhancedfarming:%s_leaves_fruity' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_fruity' % fruit)
         leaves_model(rm, 'enhancedfarming:%s_leaves_blooming' % fruit, 'minecraft:block/%s_leaves' % base, 'betterfoliage:block/%s_fluff' % base, 'enhancedfarming:block/leaves/%s_leaves_blooming' % fruit)
 
+    for namespace in ('atmospheric', 'betterfoliage', 'biomesoplenty'):
+        block_atlas(rm, namespace)
+
+
+def block_atlas(rm: ResourceManager, namespace: str):
+    rm.write((*rm.resource_dir, 'assets', namespace, 'atlases', 'blocks'), {
+        "sources": [
+            {
+                "type": "directory",
+                "source": "block",
+                "prefix": "block/"
+            }
+        ]
+    })
+
 
 def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
     rm.custom_block_model(model, 'betterfoliage:leaves', {
