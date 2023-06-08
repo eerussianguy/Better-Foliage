@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "minecraft:block/cherry_leaves",
+  "fluff": "betterfoliage:block/cherry_fluff",
+  "tintLeaves": false
+}

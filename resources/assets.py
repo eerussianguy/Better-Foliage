@@ -3,7 +3,7 @@ from mcresources import utils
 
 
 def generate(rm: ResourceManager):
-    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove')
+    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove', 'cherry')
 
     for wood in vanilla_woods:
         leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood)
@@ -107,6 +107,7 @@ def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overla
     rm.custom_block_model(model, 'betterfoliage:leaves', {
         'leaves': block,
         'fluff': fluff,
-        'overlay': overlay
+        'overlay': overlay,
+        'tintLeaves': False if model == 'minecraft:cherry_leaves' else None
     })
 

@@ -51,7 +51,7 @@ public class ForgeEventHandler
         Entity entity = mc.getCameraEntity();
         if (entity == null) return;
 
-        ClientLevel level = (ClientLevel) entity.level;
+        ClientLevel level = (ClientLevel) entity.level();
         if (level.getGameTime() % 2 != 0) return;
         final Vec3 ePos = entity.position();
         final Vec3i pos = new Vec3i((int) ePos.x, (int) ePos.y, (int) ePos.z);
