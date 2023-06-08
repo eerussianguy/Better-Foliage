@@ -77,7 +77,7 @@ curseforge {
         changelogType = "markdown"
 
         releaseType = versionType
-        addGameVersion "1.19.4"
+        addGameVersion "1.20"
 
         mainArtifact(jar) {
             displayName = System.getenv('VERSION').toString().replace('v', '')
