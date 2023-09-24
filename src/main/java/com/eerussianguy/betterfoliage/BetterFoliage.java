@@ -11,9 +11,9 @@ import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 @Mod(MOD_ID)
 public class BetterFoliage
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    //private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final String MOD_ID = "betterfoliage";
+    static final String MOD_ID = "betterfoliage";
 
     public BetterFoliage()
     {

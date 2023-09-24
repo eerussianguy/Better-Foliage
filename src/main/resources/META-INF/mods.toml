@@ -1,6 +1,6 @@
 
 modLoader="javafml" #mandatory
-loaderVersion="[47,)"
+loaderVersion="[48,)"
 license="MIT License"
 issueTrackerURL="https://github.com/eerussianguy/Better-Foliage/issues" #optional
 [[mods]] #mandatory
@@ -20,7 +20,7 @@ Most changes are configurable via resource pack.
 [[dependencies.betterfoliage]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.1, 1.21)"
+    versionRange="[1.20.2, 1.21)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.betterfoliage]]
