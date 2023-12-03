@@ -15,6 +15,8 @@ public class BetterFoliage
 
     public static final String MOD_ID = "betterfoliage";
 
+    public static boolean LEAVES_DISABLED_BY_MOD = false;
+
     public BetterFoliage()
     {
         if (FMLEnvironment.dist == Dist.CLIENT)

@@ -4,9 +4,19 @@ from mcresources import utils
 
 def generate(rm: ResourceManager):
     vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove', 'cherry')
+    tfc_woods = ('acacia', 'ash', 'aspen', 'birch', 'blackwood', 'chestnut', 'douglas_fir', 'hickory', 'kapok', 'mangrove',
+                 'maple', 'oak', 'pine', 'rosewood', 'sequoia', 'spruce', 'sycamore', 'white_cedar', 'willow')  # palm omitted
+    tfc_fruits = ('cherry', 'green_apple', 'lemon', 'olive', 'orange', 'peach', 'plum', 'red_apple')
+    for wood in tfc_woods:
+        leaves_model(rm, 'tfc:wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
+        # compat for vexxels pack
+        leaves_model(rm, 'tfc:wood/leaves/mirrored/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
+    for fruit in tfc_fruits:
+        for life in ('', '_fruiting', '_flowering', '_dry'):
+            leaves_model(rm, 'tfc:plant/%s%s_leaves' % (fruit, life), 'tfc:block/fruit_tree/%s%s_leaves' % (fruit, life), 'betterfoliage:block/tfc/%s%s_leaves_fluff' % (fruit, life), tint_leaves=False)
 
     for wood in vanilla_woods:
-        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood)
+        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood, tint_leaves=False if wood == 'cherry' else None)
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -103,11 +113,11 @@ def block_atlas(rm: ResourceManager, namespace: str):
     })
 
 
-def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None):
+def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None, tint_leaves: bool = None):
     rm.custom_block_model(model, 'betterfoliage:leaves', {
         'leaves': block,
         'fluff': fluff,
         'overlay': overlay,
-        'tintLeaves': False if model == 'minecraft:cherry_leaves' else None
+        'tintLeaves': tint_leaves
     })
 

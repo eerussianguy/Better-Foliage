@@ -98,8 +98,8 @@ public class LeavesBakedModel extends BFBakedModel
     private void buildCross(int ordinal, float x, float y, float z)
     {
         Map<Direction, BlockElementFace> mapFacesIn = Maps.newEnumMap(Direction.class);
-        mapFacesIn.put(Direction.NORTH, Helpers.makeTintedFace(Helpers.UV_DEFAULT));
-        mapFacesIn.put(Direction.SOUTH, Helpers.makeTintedFace(Helpers.UV_DEFAULT));
+        mapFacesIn.put(Direction.NORTH, tintLeaves ? Helpers.makeTintedFace(Helpers.UV_DEFAULT) : Helpers.makeFace(Helpers.UV_DEFAULT));
+        mapFacesIn.put(Direction.SOUTH, tintLeaves ? Helpers.makeTintedFace(Helpers.UV_DEFAULT) : Helpers.makeFace(Helpers.UV_DEFAULT));
 
         Vector3f from = new Vector3f(-8f, -8f, 8f);
         Vector3f to = new Vector3f(24f, 24f, 8f);
@@ -110,6 +110,7 @@ public class LeavesBakedModel extends BFBakedModel
         BlockElement part = new BlockElement(from, to, mapFacesIn, makeRotation(45f), false);
         BlockElement partR = new BlockElement(from, to, mapFacesIn, makeRotation(-45f), false);
 
+        assert leavesTex != null;
         SimpleBakedModel.Builder builder = new SimpleBakedModel.Builder(blockModel, ItemOverrides.EMPTY, false).particle(leavesTex);
         Helpers.assembleFaces(builder, part, fluffTex, modelLocation);
         Helpers.assembleFaces(builder, partR, fluffTex, modelLocation);

@@ -77,7 +77,7 @@ public class ForgeEventHandler
                     {
                         Helpers.addParticle(particle, getTextures(ParticleLocation.SNOWBALL, atlas));
                     }
-                    else if (BFConfig.CLIENT.leaves.get())
+                    else if (BFConfig.CLIENT.leaves.get() && !BetterFoliage.LEAVES_DISABLED_BY_MOD)
                     {
                         Holder<Biome> biome = level.getBiome(searchPos);
                         if (biome.is(BiomeTags.IS_TAIGA))

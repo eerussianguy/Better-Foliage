@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "betterfoliage:leaves",
+  "leaves": "tfc:block/fruit_tree/plum_flowering_leaves",
+  "fluff": "betterfoliage:block/tfc/plum_flowering_leaves_fluff",
+  "tintLeaves": false
+}

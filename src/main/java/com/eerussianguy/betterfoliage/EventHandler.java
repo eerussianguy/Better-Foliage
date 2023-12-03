@@ -48,6 +48,11 @@ public class EventHandler
         {
             ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
         }
+
+        if (ModList.get().isLoaded("tfc"))
+        {
+            BetterFoliage.LEAVES_DISABLED_BY_MOD = true;
+        }
     }
 
     private static void onModelBake(final ModelEvent.BakingCompleted event)
