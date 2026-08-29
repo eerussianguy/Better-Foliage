@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": {
+      "type": "betterfoliage:leaves",
+      "leaves": "tfc:block/wood/leaves/aspen",
+      "fluff": "tfc:block/wood/leaves/aspen_fluff"
+    }
+  }
+}

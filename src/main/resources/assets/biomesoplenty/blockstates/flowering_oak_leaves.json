@@ -2,7 +2,10 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/flowering_oak_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "biomesoplenty:block/flowering_oak_leaves",
+      "fluff": "betterfoliage:block/flowering_oak_fluff",
+      "overlay": "biomesoplenty:block/flowering_oak_leaves_overlay"
     }
   }
 }

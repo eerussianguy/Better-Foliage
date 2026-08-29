@@ -2,10 +2,18 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "snowy=false": {
-      "model": "betterfoliage:block/podzol"
+      "type": "betterfoliage:grass",
+      "dirt": "minecraft:block/dirt",
+      "top": "minecraft:block/podzol_top",
+      "overlay": "minecraft:block/podzol_side",
+      "tint": false
     },
     "snowy=true": {
-      "model": "betterfoliage:block/snowy_grass_block_no_grass"
+      "type": "betterfoliage:grass",
+      "dirt": "minecraft:block/dirt",
+      "top": "minecraft:block/snow",
+      "overlay": "minecraft:block/grass_block_snow",
+      "tint": false
     }
   }
 }

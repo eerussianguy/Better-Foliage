@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": {
+      "type": "betterfoliage:leaves",
+      "leaves": "minecraft:block/birch_leaves",
+      "fluff": "betterfoliage:block/birch_fluff"
+    }
+  }
+}

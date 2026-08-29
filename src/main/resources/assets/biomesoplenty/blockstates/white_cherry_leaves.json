@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/white_cherry_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "biomesoplenty:block/white_cherry_leaves",
+      "fluff": "betterfoliage:block/white_cherry_fluff"
     }
   }
 }

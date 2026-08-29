@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": {
+      "type": "betterfoliage:leaves",
+      "leaves": "tfc:block/wood/leaves/douglas_fir",
+      "fluff": "tfc:block/wood/leaves/douglas_fir_fluff"
+    }
+  }
+}

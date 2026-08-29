@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": {
+      "type": "betterfoliage:leaves",
+      "leaves": "minecraft:block/pale_oak_leaves",
+      "fluff": "betterfoliage:block/pale_oak_fluff",
+      "tintLeaves": false
+    }
+  }
+}

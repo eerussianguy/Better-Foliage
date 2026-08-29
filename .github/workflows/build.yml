@@ -1,4 +1,4 @@
-name: Build 1.21.x
+name: Build 26.1.x
 
 on:
   push:
@@ -13,15 +13,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v4
         with:
-          java-version: '21'
-          distribution: 'adopt'
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Get Version
         id: version
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
@@ -30,7 +35,7 @@ jobs:
             return ref.startsWith('refs/tags/v') ? ref.replace('refs/tags/v', '') : 'indev';
       - name: Get Version Type
         id: version_type
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
@@ -42,10 +47,10 @@ jobs:
           VERSION: ${{ steps.version.outputs.result }}
           VERSION_TYPE: ${{ steps.version_type.outputs.result }}
         run: echo "version = $VERSION, type = $VERSION_TYPE"
-      - name: Build
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
         env:
           VERSION: ${{ steps.version.outputs.result }}
       - name: Publish
@@ -67,10 +72,10 @@ jobs:
           name: BetterFoliageRenewed ${{ steps.version.outputs.result }}
           version: ${{ steps.version.outputs.result }}
           version-type: ${{ steps.version_type.outputs.result }}
-          java: 21
+          java: 25
           loaders: |
             neoforge
           game-versions: |
-            1.21
+            26.1.2
 
           changelog-file: CHANGELOG.md

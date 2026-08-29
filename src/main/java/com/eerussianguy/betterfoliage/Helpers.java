@@ -1,119 +1,28 @@
 package com.eerussianguy.betterfoliage;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BlockModelRotation;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.client.resources.model.SimpleBakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.FoliageColor;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
 
-import com.eerussianguy.betterfoliage.particle.SpritePicker;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.neoforged.neoforge.client.model.ExtraFaceData;
-import org.apache.commons.lang3.mutable.MutableObject;
+import org.jspecify.annotations.Nullable;
 
 import static com.eerussianguy.betterfoliage.BetterFoliage.MOD_ID;
 
 public class Helpers
 {
     public static final Direction[] DIRECTIONS = Direction.values();
-    public static final ModelResourceLocation BACKING_DIRT_MODEL = ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath("minecraft", "dirt"));
 
-    public static ResourceLocation identifier(String name)
+    public static Identifier identifier(String name)
     {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
+        return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
 
-    public static ModelResourceLocation standalone(String name)
-    {
-        return ModelResourceLocation.standalone(identifier(name));
-    }
-
-    public static final ResourceLocation EMPTY = identifier("empty");
-
-    public static final BlockFaceUV UV_DEFAULT = new BlockFaceUV(new float[] {0f, 0f, 16f, 16f}, 0);
-
-    public static ExtraFaceData forgeFace(boolean ao)
-    {
-        return ao ?
-            new ExtraFaceData(0xFFFFFFFF, 0, 0, true)
-            : new ExtraFaceData(0xFFFFFFFF, 0, 0, false);
-    }
-
-    public static BlockElementFace makeTintedFace(BlockFaceUV uv, boolean ao)
-    {
-        return new BlockElementFace(null, 0, "", uv, forgeFace(ao), new MutableObject<>());
-    }
-
-    public static BlockElementFace makeTintedFace(BlockFaceUV uv)
-    {
-        return new BlockElementFace(null, 0, "", uv);
-    }
-
-    public static BlockElementFace makeFace(BlockFaceUV uv, boolean ao)
-    {
-        return new BlockElementFace(null, -1, "", uv, forgeFace(ao), new MutableObject<>());
-    }
-
-    public static BlockElementFace makeFace(BlockFaceUV uv)
-    {
-        return new BlockElementFace(null, -1, "", uv);
-    }
-
-    public static ResourceLocation requireID(JsonObject json, String member)
-    {
-        return ResourceLocation.parse(GsonHelper.getAsString(json, member, EMPTY.toString()));
-    }
-
-    public static ResourceLocation identifierOrEmpty(JsonObject json, String member)
-    {
-        if (!json.has(member)) return EMPTY;
-        return ResourceLocation.parse(json.get(member).getAsString());
-    }
-
-    public static BakedQuad makeBakedQuad(BlockElement BlockElement, BlockElementFace partFace, TextureAtlasSprite atlasSprite, Direction dir, BlockModelRotation modelRotation)
-    {
-        return new FaceBakery().bakeQuad(BlockElement.from, BlockElement.to, partFace, atlasSprite, dir, modelRotation, BlockElement.rotation, true);
-    }
-
-    public static void assembleFaces(SimpleBakedModel.Builder builder, BlockElement part, TextureAtlasSprite sprite)
-    {
-        for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet())
-        {
-            Direction d = e.getKey();
-            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), sprite, d, BlockModelRotation.X0_Y0));
-        }
-    }
-
-    public static void assembleFacesConditional(SimpleBakedModel.Builder builder, BlockElement part, Function<Direction, TextureAtlasSprite> getter)
-    {
-        for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet())
-        {
-            Direction d = e.getKey();
-            builder.addCulledFace(d, Helpers.makeBakedQuad(part, e.getValue(), getter.apply(d), d, BlockModelRotation.X0_Y0));
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public static TextureAtlasSprite getTexture(ResourceLocation location)
-    {
-        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(location);
-    }
+    public static final Identifier EMPTY = identifier("empty");
 
     /**
      * Equivalent of a linspace function in numpy or MATLAB or what have you
@@ -131,42 +40,22 @@ public class Helpers
         return f;
     }
 
-    public static void addParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites)
+    /**
+     * Particles take their sprite in the constructor now, and we build ours by hand rather than
+     * through a registered {@code ParticleProvider}, so the sprite has to be chosen off the atlas
+     * before the particle exists.
+     *
+     * @return null if the sprites have not been stitched yet, in which case there is nothing to spawn
+     */
+    @Nullable
+    public static TextureAtlasSprite pickSprite(@Nullable List<TextureAtlasSprite> sprites, RandomSource random)
     {
-        if (sprites == null) return;
+        if (sprites == null || sprites.isEmpty()) return null;
+        return sprites.get(random.nextInt(sprites.size()));
+    }
 
-        SpritePicker picker = new SpritePicker();
-        picker.rebind(sprites);
-
-        particle.pickSprite(picker);
+    public static void addParticle(Particle particle)
+    {
         Minecraft.getInstance().particleEngine.add(particle);
-    }
-
-    static void addTintedParticle(TextureSheetParticle particle, List<TextureAtlasSprite> sprites, BlockState state, ClientLevel level, BlockPos pos)
-    {
-        Minecraft mc = Minecraft.getInstance();
-
-        SpritePicker picker = new SpritePicker();
-        picker.rebind(sprites);
-
-        int color = mc.getBlockColors().getColor(state, level, pos); // catches leaves that override default (like birch)
-        if (color == FoliageColor.getDefaultColor())
-        {
-            color = level.getBiome(pos).value().getFoliageColor(); // catches stuff like swamp that uses biome always
-        }
-
-        float r = ((color >> 16) & 0xFF) / 255F;
-        float g = ((color >> 8) & 0xFF) / 255F;
-        float b = (color & 0xFF) / 255F;
-        //float a = ((color >> 24) & 0xFF) / 255F;
-
-        particle.pickSprite(picker);
-        particle.setColor(r, g, b);
-        mc.particleEngine.add(particle);
-    }
-
-    public static void applyTransform(ItemDisplayContext cameraTransformType, PoseStack poseStack, boolean lefty)
-    {
-        Minecraft.getInstance().getModelManager().getModel(BACKING_DIRT_MODEL).applyTransform(cameraTransformType, poseStack, lefty);
     }
 }

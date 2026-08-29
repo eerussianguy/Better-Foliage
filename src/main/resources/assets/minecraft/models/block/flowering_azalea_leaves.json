@@ -1,6 +1,0 @@
-{
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "betterfoliage:leaves",
-  "leaves": "minecraft:block/flowering_azalea_leaves",
-  "fluff": "betterfoliage:block/flowering_azalea_fluff"
-}

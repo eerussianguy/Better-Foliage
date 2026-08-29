@@ -10,18 +10,15 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import com.eerussianguy.betterfoliage.particle.LeafParticle;
+import com.eerussianguy.betterfoliage.particle.SnowballParticle;
 import com.eerussianguy.betterfoliage.particle.SoulParticle;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -55,49 +52,33 @@ public class ForgeEventHandler
         final Vec3 ePos = entity.position();
         final Vec3i pos = new Vec3i((int) ePos.x, (int) ePos.y, (int) ePos.z);
 
-        RandomSource rand = level.random;
+        RandomSource rand = level.getRandom();
         final int spawnDistance = BFConfig.CLIENT.particleDistance.get();
 
-        // stupid hack
-        // noinspection deprecation
         final AbstractTexture particleTexture = Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES);
-        particleTexture.setFilter(false, false);
         if (particleTexture instanceof TextureAtlas atlas)
         {
             for (int i = 0; i < BFConfig.CLIENT.particleAttempts.get(); i++)
             {
                 BlockPos searchPos = new BlockPos(pos.offset(rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance), rand.nextInt(spawnDistance) - 1, rand.nextInt(spawnDistance) - rand.nextInt(spawnDistance)));
                 BlockState state = level.getBlockState(searchPos);
-                if (state.is(BlockTags.LEAVES) && level.isEmptyBlock(searchPos.below()))
+                if (BFConfig.CLIENT.snowballs.get() && state.is(BlockTags.LEAVES) && level.isEmptyBlock(searchPos.below())
+                    && rand.nextInt(2) == 0 && level.getBlockState(searchPos.above()).is(Blocks.SNOW))
                 {
-                    LeafParticle particle = new LeafParticle(level, searchPos.getX() + 0.5D, searchPos.getY() - 1D, searchPos.getZ() + 0.5D);
-
-                    if (BFConfig.CLIENT.snowballs.get() && rand.nextInt(2) == 0 && level.getBlockState(searchPos.above()).is(Blocks.SNOW))
+                    TextureAtlasSprite sprite = Helpers.pickSprite(getTextures(ParticleLocation.SNOWBALL, atlas), rand);
+                    if (sprite != null)
                     {
-                        Helpers.addParticle(particle, getTextures(ParticleLocation.SNOWBALL, atlas));
-                    }
-                    else if (BFConfig.CLIENT.leaves.get() && !BetterFoliage.LEAVES_DISABLED_BY_MOD)
-                    {
-                        Holder<Biome> biome = level.getBiome(searchPos);
-                        if (biome.is(BiomeTags.IS_TAIGA))
-                        {
-                            Helpers.addTintedParticle(particle, getTextures(ParticleLocation.LEAF_SPRUCE, atlas), state, level, searchPos);
-                        }
-                        else if (biome.is(BiomeTags.IS_JUNGLE))
-                        {
-                            Helpers.addTintedParticle(particle, getTextures(ParticleLocation.LEAF_JUNGLE, atlas), state, level, searchPos);
-                        }
-                        else
-                        {
-                            Helpers.addTintedParticle(particle, getTextures(ParticleLocation.LEAF, atlas), state, level, searchPos);
-                        }
+                        Helpers.addParticle(new SnowballParticle(level, searchPos.getX() + 0.5D, searchPos.getY() - 1D, searchPos.getZ() + 0.5D, sprite));
                     }
                 }
                 else if (BFConfig.CLIENT.souls.get() && (state.is(Blocks.SOUL_SAND) || state.is(Blocks.SOUL_SOIL)) && level.isEmptyBlock(searchPos.above()))
                 {
-                    SoulParticle particle = new SoulParticle(level, searchPos.getX() + 0.5D, searchPos.getY() + 1.0D, searchPos.getZ() + 0.5D);
-                    Helpers.addParticle(particle, getTextures(ParticleLocation.SOUL, atlas));
-                    getTextures(ParticleLocation.SOUL_TRAIL, atlas); // force cache to be correct, this is dumb but it will work
+                    TextureAtlasSprite sprite = Helpers.pickSprite(getTextures(ParticleLocation.SOUL, atlas), rand);
+                    if (sprite != null)
+                    {
+                        Helpers.addParticle(new SoulParticle(level, searchPos.getX() + 0.5D, searchPos.getY() + 1.0D, searchPos.getZ() + 0.5D, sprite));
+                    }
+                    getTextures(ParticleLocation.SOUL_TRAIL, atlas); // warm the cache; the trail particles spawn without an atlas to hand
                 }
             }
         }

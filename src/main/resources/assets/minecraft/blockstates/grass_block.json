@@ -2,10 +2,20 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "snowy=false": {
-      "model": "betterfoliage:block/grass_block"
+      "type": "betterfoliage:grass",
+      "dirt": "minecraft:block/dirt",
+      "top": "minecraft:block/grass_block_top",
+      "overlay": "minecraft:block/grass_block_side_overlay",
+      "tint": true,
+      "grass": "betterfoliage:block/better_grass"
     },
     "snowy=true": {
-      "model": "betterfoliage:block/snowy_grass_block"
+      "type": "betterfoliage:grass",
+      "dirt": "minecraft:block/dirt",
+      "top": "minecraft:block/snow",
+      "overlay": "minecraft:block/grass_block_snow",
+      "tint": false,
+      "grass": "betterfoliage:block/better_grass_snowed"
     }
   }
 }

@@ -1,29 +1,26 @@
 package com.eerussianguy.betterfoliage.particle;
 
 import com.eerussianguy.betterfoliage.ForgeEventHandler;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
 
-import com.eerussianguy.betterfoliage.EventHandler;
 import com.eerussianguy.betterfoliage.Helpers;
 import com.eerussianguy.betterfoliage.ParticleLocation;
+import org.jspecify.annotations.NullMarked;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-public class SoulParticle extends TextureSheetParticle
+@NullMarked
+public class SoulParticle extends SingleQuadParticle
 {
     private int ageOffset;
     private double drift;
     private boolean children;
 
-    public SoulParticle(ClientLevel level, double x, double y, double z)
+    public SoulParticle(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite)
     {
-        super(level, x, y, z);
+        super(level, x, y, z, sprite);
         hasPhysics = false;
         setSize(0.02F, 0.02F);
         ageOffset = random.nextInt(15);
@@ -33,9 +30,9 @@ public class SoulParticle extends TextureSheetParticle
         children = true;
     }
 
-    public SoulParticle(ClientLevel level, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize)
+    public SoulParticle(ClientLevel level, double x, double y, double z, boolean children, double drift, int ageOffset, double yd, int age, float quadSize, TextureAtlasSprite sprite)
     {
-        this(level, x, y, z);
+        this(level, x, y, z, sprite);
         this.children = children;
         this.drift = drift;
         this.ageOffset = ageOffset;
@@ -65,14 +62,17 @@ public class SoulParticle extends TextureSheetParticle
         zd = swirl + drift;
         if (children && (age == 5 || age == 10 || age == 15))
         {
-            SoulParticle particle = new SoulParticle(level, x, y - (0.2D * age / 5), z, false, drift, ageOffset, yd, age, quadSize);
-            Helpers.addParticle(particle, ForgeEventHandler.getTextures(ParticleLocation.SOUL_TRAIL, null));
+            final TextureAtlasSprite trail = Helpers.pickSprite(ForgeEventHandler.getTextures(ParticleLocation.SOUL_TRAIL, null), random);
+            if (trail != null)
+            {
+                Helpers.addParticle(new SoulParticle(level, x, y - (0.2D * age / 5), z, false, drift, ageOffset, yd, age, quadSize, trail));
+            }
         }
     }
 
     @Override
-    public ParticleRenderType getRenderType()
+    protected Layer getLayer()
     {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return Layer.OPAQUE;
     }
 }

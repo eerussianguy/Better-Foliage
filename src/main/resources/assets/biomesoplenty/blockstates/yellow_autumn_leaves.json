@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/yellow_autumn_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "biomesoplenty:block/yellow_autumn_leaves",
+      "fluff": "betterfoliage:block/yellow_autumn_fluff"
     }
   }
 }

@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/grimwood_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "atmospheric:block/grimwood_leaves",
+      "fluff": "betterfoliage:block/grimwood_fluff"
     }
   }
 }

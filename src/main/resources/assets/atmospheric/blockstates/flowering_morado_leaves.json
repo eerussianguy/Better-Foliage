@@ -2,7 +2,10 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/flowering_morado_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "atmospheric:block/flowering_morado_leaves",
+      "fluff": "betterfoliage:block/flowering_morado_fluff",
+      "overlay": "atmospheric:block/flowering_morado_leaves_overlay"
     }
   }
 }

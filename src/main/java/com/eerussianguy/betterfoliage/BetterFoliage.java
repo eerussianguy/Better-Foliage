@@ -14,11 +14,9 @@ public class BetterFoliage
 {
     public static final String MOD_ID = "betterfoliage";
 
-    public static boolean LEAVES_DISABLED_BY_MOD = false;
-
     public BetterFoliage(ModContainer mod, IEventBus bus)
     {
-        if (FMLEnvironment.dist == Dist.CLIENT)
+        if (FMLEnvironment.getDist() == Dist.CLIENT)
         {
             EventHandler.init(bus);
             ForgeEventHandler.init();

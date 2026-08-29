@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/jacaranda_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "biomesoplenty:block/jacaranda_leaves",
+      "fluff": "betterfoliage:block/jacaranda_fluff"
     }
   }
 }

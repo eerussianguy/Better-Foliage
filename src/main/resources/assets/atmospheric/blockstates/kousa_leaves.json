@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/kousa_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "atmospheric:block/kousa_leaves",
+      "fluff": "betterfoliage:block/kousa_fluff"
     }
   }
 }

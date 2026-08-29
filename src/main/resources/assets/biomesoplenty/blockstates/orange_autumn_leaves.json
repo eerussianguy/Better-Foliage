@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/orange_autumn_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "biomesoplenty:block/orange_autumn_leaves",
+      "fluff": "betterfoliage:block/orange_autumn_fluff"
     }
   }
 }

@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/yucca_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "atmospheric:block/yucca_leaves",
+      "fluff": "betterfoliage:block/yucca_fluff"
     }
   }
 }

@@ -2,7 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "": {
-      "model": "betterfoliage:block/blue_blossom_leaves"
+      "type": "betterfoliage:leaves",
+      "leaves": "quark:block/blue_blossom_leaves",
+      "fluff": "betterfoliage:block/blue_blossom_fluff"
     }
   }
 }

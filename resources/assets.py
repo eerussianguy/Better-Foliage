@@ -3,20 +3,20 @@ from mcresources import utils
 
 
 def generate(rm: ResourceManager):
-    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove', 'cherry')
+    # vanilla registers a tint source for these leaves in BlockColors; the rest render untinted
+    untinted_woods = ('cherry', 'pale_oak', 'azalea', 'flowering_azalea')
+    vanilla_woods = ('oak', 'acacia', 'dark_oak', 'birch', 'jungle', 'spruce', 'azalea', 'flowering_azalea', 'mangrove', 'cherry', 'pale_oak')
     tfc_woods = ('acacia', 'ash', 'aspen', 'birch', 'blackwood', 'chestnut', 'douglas_fir', 'hickory', 'kapok', 'mangrove',
                  'maple', 'oak', 'pine', 'rosewood', 'sequoia', 'spruce', 'sycamore', 'white_cedar', 'willow')  # palm omitted
     tfc_fruits = ('cherry', 'green_apple', 'lemon', 'olive', 'orange', 'peach', 'plum', 'red_apple')
     for wood in tfc_woods:
         leaves_model(rm, 'tfc:wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
-        # compat for vexxels pack
-        leaves_model(rm, 'tfc:wood/leaves/mirrored/%s' % wood, 'tfc:block/wood/leaves/%s' % wood, 'tfc:block/wood/leaves/%s_fluff' % wood)
     for fruit in tfc_fruits:
         for life in ('', '_fruiting', '_flowering', '_dry'):
             leaves_model(rm, 'tfc:plant/%s%s_leaves' % (fruit, life), 'tfc:block/fruit_tree/%s%s_leaves' % (fruit, life), 'betterfoliage:block/tfc/%s%s_leaves_fluff' % (fruit, life), tint_leaves=False)
 
     for wood in vanilla_woods:
-        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood, tint_leaves=False if wood == 'cherry' else None)
+        leaves_model(rm, 'minecraft:%s_leaves' % wood, 'minecraft:block/%s_leaves' % wood, 'betterfoliage:block/%s_fluff' % wood, tint_leaves=False if wood in untinted_woods else None)
 
     pad = 0
     for flower in range(0, 1 + 1):
@@ -34,58 +34,24 @@ def generate(rm: ResourceManager):
         for r in (None, 90, 180, 270)]
     rm.blockstate('minecraft:cactus', variants={"": cactus_variants}, use_default_model=False)
 
+    grass_block = grass_variant('minecraft:block/grass_block_top', 'minecraft:block/grass_block_side_overlay', tint=True, grass='betterfoliage:block/better_grass')
+    snowy = grass_variant('minecraft:block/snow', 'minecraft:block/grass_block_snow', grass='betterfoliage:block/better_grass_snowed')
+    snowy_no_grass = grass_variant('minecraft:block/snow', 'minecraft:block/grass_block_snow')
+
     rm.blockstate('minecraft:grass_block', variants={
-        'snowy=false': {'model': 'betterfoliage:block/grass_block'},
-        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block'}
-    })
+        'snowy=false': grass_block,
+        'snowy=true': snowy
+    }, use_default_model=False)
 
     rm.blockstate('minecraft:mycelium', variants={
-        'snowy=false': {'model': 'betterfoliage:block/mycelium'},
-        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block'}
-    })
+        'snowy=false': grass_variant('minecraft:block/mycelium_top', 'minecraft:block/mycelium_side', grass='betterfoliage:block/better_mycelium'),
+        'snowy=true': snowy
+    }, use_default_model=False)
 
     rm.blockstate('minecraft:podzol', variants={
-        'snowy=false': {'model': 'betterfoliage:block/podzol'},
-        'snowy=true': {'model': 'betterfoliage:block/snowy_grass_block_no_grass'}
-    })
-
-    rm.custom_block_model('betterfoliage:grass_block', 'betterfoliage:grass', {
-        'dirt': 'minecraft:block/dirt',
-        'top': 'minecraft:block/grass_block_top',
-        'overlay': 'minecraft:block/grass_block_side_overlay',
-        'tint': True,
-        'grass': 'betterfoliage:block/better_grass'
-    })
-
-    rm.custom_block_model('betterfoliage:snowy_grass_block', 'betterfoliage:grass', {
-        'dirt': 'minecraft:block/dirt',
-        'top': 'minecraft:block/snow',
-        'overlay': 'minecraft:block/grass_block_snow',
-        'tint': False,
-        'grass': 'betterfoliage:block/better_grass_snowed'
-    })
-
-    rm.custom_block_model('betterfoliage:snowy_grass_block_no_grass', 'betterfoliage:grass', {
-        'dirt': 'minecraft:block/dirt',
-        'top': 'minecraft:block/snow',
-        'overlay': 'minecraft:block/grass_block_snow',
-        'tint': False,
-    })
-
-    rm.custom_block_model('betterfoliage:mycelium', 'betterfoliage:grass', {
-        'dirt': 'minecraft:block/dirt',
-        'top': 'minecraft:block/mycelium_top',
-        'overlay': 'minecraft:block/mycelium_side',
-        'tint': False,
-        'grass': 'betterfoliage:block/better_mycelium'
-    })
-
-    rm.custom_block_model('betterfoliage:podzol', 'betterfoliage:grass', {
-        'dirt': 'minecraft:block/dirt',
-        'top': 'minecraft:block/podzol_top',
-        'overlay': 'minecraft:block/podzol_side',
-        'tint': False
-    })
+        'snowy=false': grass_variant('minecraft:block/podzol_top', 'minecraft:block/podzol_side'),
+        'snowy=true': snowy_no_grass
+    }, use_default_model=False)
 
     rm.block_model('better_grass', {'cross': 'betterfoliage:block/better_grass'}, parent='betterfoliage:block/tinted_cross_high')
     rm.block_model('better_mycelium', {'cross': 'betterfoliage:block/better_mycelium'}, parent='betterfoliage:block/cross_high')
@@ -113,11 +79,29 @@ def block_atlas(rm: ResourceManager, namespace: str):
     })
 
 
-def leaves_model(rm: ResourceManager, model: str, block: str, fluff: str, overlay: str = None, tint_leaves: bool = None):
-    rm.custom_block_model(model, 'betterfoliage:leaves', {
+def grass_variant(top: str, overlay: str, dirt: str = 'minecraft:block/dirt', tint: bool = False, grass: str = None):
+    # Grass blocks are a dynamic block state model (they read their neighbours), so the definition
+    # lives in the blockstate rather than in a model with a "loader" key.
+    variant = {
+        'type': 'betterfoliage:grass',
+        'dirt': dirt,
+        'top': top,
+        'overlay': overlay,
+        'tint': tint,
+        'grass': grass
+    }
+    return {k: v for k, v in variant.items() if v is not None}
+
+
+def leaves_model(rm: ResourceManager, block_id: str, block: str, fluff: str, overlay: str = None, tint_leaves: bool = None):
+    # Leaves are a dynamic block state model (they pick a fluff cross from their BlockPos), so the
+    # definition lives in the blockstate rather than in a model with a "loader" key.
+    variant = {
+        'type': 'betterfoliage:leaves',
         'leaves': block,
         'fluff': fluff,
         'overlay': overlay,
         'tintLeaves': tint_leaves
-    })
+    }
+    rm.blockstate(block_id, variants={'': {k: v for k, v in variant.items() if v is not None}}, use_default_model=False)
 

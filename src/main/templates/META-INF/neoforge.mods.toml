@@ -1,48 +1,66 @@
 
-modLoader="javafml" #mandatory
-loaderVersion="[4,)"
-license="MIT License"
+license="${mod_license}"
+
 issueTrackerURL="https://github.com/eerussianguy/Better-Foliage/issues" #optional
+
 [[mods]] #mandatory
-modId="betterfoliage" #mandatory
-displayName="Better Foliage" #mandatory
+
+modId="${mod_id}" #mandatory
+
+version="${mod_version}" #mandatory
+
+displayName="${mod_name}" #mandatory
+
 displayURL="https://github.com/eerussianguy/Better-Foliage" #optional
-logoFile="examplemod.png" #optional
-credits="Paint_Ninja for the commission" #optional
-authors="EERussianguy, PaintNinja" #optional
-displayTest="IGNORE_ALL_VERSION"
+
+credits="Paint_Ninja for the commission"
+
+authors="EERussianguy, PaintNinja"
+
 description='''
 A slim port of Better Foliage for 1.16 and beyond.
 
 Most changes are configurable via resource pack.
 '''
-[[dependencies.betterfoliage]]
-    modId="minecraft"
-    type = "optional"
-    versionRange="[1.21, 1.22)"
+
+[[dependencies.${mod_id}]] #optional
+    modId="neoforge" #mandatory
+    type="required" #mandatory
+    versionRange="[${neo_version},)" #mandatory
     ordering="NONE"
     side="BOTH"
-[[dependencies.betterfoliage]]
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
     modId="biomesoplenty"
-    type = "optional"
+    type="optional"
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.betterfoliage]]
+
+[[dependencies.${mod_id}]]
     modId="quark"
-    type = "optional"
+    type="optional"
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.betterfoliage]]
+
+[[dependencies.${mod_id}]]
     modId="atmospheric"
-    type = "optional"
+    type="optional"
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.betterfoliage]]
+
+[[dependencies.${mod_id}]]
     modId="tfc"
-    type = "optional"
+    type="optional"
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
